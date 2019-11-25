@@ -3,21 +3,54 @@ import React, {
 } from 'react';
 import {
   Container,
-  Button,
-  Message,
+  Form,
 } from 'semantic-ui-react';
-// import fetch from 'isomorphic-fetch';
+import fetch from 'isomorphic-fetch';
+import { withRouter } from 'react-router-dom';
 
-const Home = ({ accessToken, shop, appUrl }) => {
+import { API_URL } from '../constants';
+
+const Home = ({ location }) => {
   const [loading, setLoading] = useState(false);
 
-  const [data, setData] = useState(null);
+  const [value, setValue] = useState(null);
+
+  const submit = async () => {
+    try {
+      const get = await fetch(`${API_URL}/shopify?shop=${value}`, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      });
+
+      const result = await get.json();
+
+      window.location.href = result;
+      // console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
-    <Container>
-      home
+    <Container
+      style={{ marginTop: '1rem' }}
+    >
+      <Form>
+        <Form.Input
+          placeholder="Shop name"
+          onChange={(event, { value }) => setValue(value)}
+          defaultValue="inventory-manager-1991.myshopify.com"
+        />
+
+        <Form.Button
+          onClick={submit}
+        >
+          Submit
+        </Form.Button>
+      </Form>
     </Container>
   )
 }
 
-export default Home;
+export default withRouter(Home);
