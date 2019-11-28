@@ -18,7 +18,7 @@ const Shopify = ({ location }) => {
     setLoading(true);
 
     try {
-      const get = await fetch(`${API_URL}/shopify?${location.search}`, {
+      const get = await fetch(`${API_URL}/shopify${location.search}`, {
         headers: {
           'Content-Type': 'application/json'
         },

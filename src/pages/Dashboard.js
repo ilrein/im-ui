@@ -15,15 +15,16 @@ const Dashboard = ({ location }) => {
   const [token, setToken] = useState('');
 
   const getPermanentToken = async () => {
+    if (token.length > 0) return;
     setLoading(true);
 
     try {
-      console.log('trying to get perm token', location.search);
       const get = await fetch(`${API_URL}/shopify/callback${location.search}`)
-
       const result = await get.json();
 
+      // hello
       setToken(result);
+      console.log(result);
     } catch (error) {
       console.log(error);
     }
