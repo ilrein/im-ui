@@ -36,12 +36,12 @@ const Shopify = ({ location }) => {
 
   useEffect(() => {
     onMount();
-  }, []);
+  }, []); // eslint-disable-line
 
   return (
     <Container>
       <Message
-        loading={loading}
+        loading={loading.toString()}
       />
     </Container>
   )

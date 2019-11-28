@@ -4,32 +4,15 @@ import React, {
 import {
   Container,
   Button,
-  Message,
 } from 'semantic-ui-react';
-// import fetch from 'isomorphic-fetch';
 
-const Dashboard = ({ accessToken, shop, appUrl }) => {
-  const [loading, setLoading] = useState(false);
-
-  const [data, setData] = useState(null);
+const Dashboard = () => {
+  const [loading, setLoading] = useState(false); // eslint-disable-line
 
   return (
-    <Container>
-      {/* <Message
-          header={shop}
-          content={appUrl}
-        /> */}
-
-      {
-        data
-          ? (
-            <Message
-              header="Data"
-              content={data}
-            />
-          )
-          : null
-      }
+    <Container
+      style={{ marginTop: '1rem' }}
+    >
 
       <Button
         primary

@@ -11,7 +11,7 @@ import { withRouter } from 'react-router-dom';
 import { API_URL } from '../constants';
 
 const Home = ({ location }) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); // eslint-disable-line
 
   const [value, setValue] = useState(null);
 
