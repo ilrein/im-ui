@@ -26,6 +26,8 @@ const Shopify = ({ location }) => {
 
       const result = await get.json();
 
+      console.log(result);
+
       window.location.href = result;
     } catch (error) {
       console.log(error);

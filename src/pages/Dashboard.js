@@ -1,28 +1,54 @@
 import React, {
   useState,
+  useEffect,
 } from 'react';
 import {
-  Container,
-  Button,
+  Statistic,
 } from 'semantic-ui-react';
+import { withRouter } from 'react-router-dom';
+import fetch from 'isomorphic-fetch';
 
-const Dashboard = () => {
+import { API_URL } from '../constants';
+
+const Dashboard = ({ location }) => {
   const [loading, setLoading] = useState(false); // eslint-disable-line
+  const [token, setToken] = useState('');
+
+  const getPermanentToken = async () => {
+    setLoading(true);
+
+    try {
+      console.log('trying to get perm token', location.search);
+      const get = await fetch(`${API_URL}/shopify/callback${location.search}`)
+
+      const result = await get.json();
+
+      setToken(result);
+    } catch (error) {
+      console.log(error);
+    }
+
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    getPermanentToken()
+  }, []); // eslint-disable-line
 
   return (
-    <Container
-      style={{ marginTop: '1rem' }}
-    >
-
-      <Button
-        primary
-        onClick={() => alert('wtf')}
-        loading={loading}
-      >
-        Sync all products
-        </Button>
-    </Container>
+    <div>
+      <Statistic.Group>
+        <Statistic>
+          <Statistic.Value>22</Statistic.Value>
+          <Statistic.Label>Faves</Statistic.Label>
+        </Statistic>
+        <Statistic>
+          <Statistic.Value>31,200</Statistic.Value>
+          <Statistic.Label>Views</Statistic.Label>
+        </Statistic>
+      </Statistic.Group>
+    </div>
   )
 }
 
-export default Dashboard;
+export default withRouter(Dashboard);
