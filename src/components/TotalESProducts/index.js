@@ -7,12 +7,12 @@ import { Statistic } from 'semantic-ui-react';
 
 import { API_URL } from '../../constants';
 
-const TotalShopifyProducts = ({ token, shop }) => {
+const TotalESProducts = ({ token, shop }) => {
   const [count, setCount] = useState(0);
 
   const getProductsCount = async (token, shop) => {
     try {
-      const get = await fetch(`${API_URL}/api/shopify/products/count.json`, {
+      const get = await fetch(`${API_URL}/api/products/count`, {
         headers: {
           token,
           shop,
@@ -33,10 +33,10 @@ const TotalShopifyProducts = ({ token, shop }) => {
 
   return (
     <Statistic
-      label="Total Shopify Products"
+      label="Total Synced Products"
       value={count}
     />
   )
 };
 
-export default TotalShopifyProducts;
+export default TotalESProducts;

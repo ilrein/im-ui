@@ -18,6 +18,7 @@ const Dashboard = ({ location, history }) => {
   const [loading, setLoading] = useState(false); // eslint-disable-line
   const [token, setToken] = useState(null);
   const [shop, setShop] = useState(null);
+  const [indexExists, setIndexExists] = useState(false)
 
   const getPermanentToken = async () => {
     setLoading(true);
@@ -28,6 +29,7 @@ const Dashboard = ({ location, history }) => {
 
       setShop(qs.parse(location.search).shop);
       setToken(result);
+      console.log(result);
     } catch (error) {
       history.push('/shopify?shop=inventory-manager-1991.myshopify.com');
     }
@@ -35,8 +37,28 @@ const Dashboard = ({ location, history }) => {
     setLoading(false);
   }
 
+  const checkIfShopNameIndexExists = async () => {
+    setLoading(true);
+
+    try {
+      const get = await fetch(`${API_URL}/api/createIndex`, {
+        headers: {
+          shop,
+        },
+      })
+      const result = await get.json();
+
+      setIndexExists(result);
+    } catch (error) {
+      // no index exists
+    }
+
+    setLoading(false);
+  }
+
   useEffect(() => {
     getPermanentToken();
+    checkIfShopNameIndexExists()
   }, []); // eslint-disable-line
 
   return (
@@ -50,6 +72,7 @@ const Dashboard = ({ location, history }) => {
       {
         token
         && shop
+        && indexExists
           ? <InnerDashboard token={token} shop={shop} />
           : null
       }

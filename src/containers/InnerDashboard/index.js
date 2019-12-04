@@ -1,16 +1,22 @@
 import React from 'react';
+import { Container } from 'semantic-ui-react';
 
 import TotalShopifyProducts from '../../components/TotalShopifyProducts';
+import TotalESProducts from '../../components/TotalESProducts';
 
 const InnerDashboard = (props) => {
   return (
-    <>
-      inner dashboard
-
+    <Container
+      style={{ marginTop: '1rem' }}
+    >
       <TotalShopifyProducts
         {...props}
       />
-    </>
+
+      <TotalESProducts
+        {...props}
+      />
+    </Container>
   )
 };
 
