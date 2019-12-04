@@ -1,9 +1,15 @@
 import React from 'react';
 
-const InnerDashboard = ({ token, shop }) => {
+import TotalShopifyProducts from '../../components/TotalShopifyProducts';
+
+const InnerDashboard = (props) => {
   return (
     <>
       inner dashboard
+
+      <TotalShopifyProducts
+        {...props}
+      />
     </>
   )
 };
