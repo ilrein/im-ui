@@ -3,7 +3,7 @@ import React, {
   useEffect,
 } from 'react';
 import {
-  Statistic,
+  Segment,
 } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import fetch from 'isomorphic-fetch';
@@ -11,47 +11,40 @@ import fetch from 'isomorphic-fetch';
 // local
 import { API_URL } from '../constants';
 import Navbar from '../components/Navbar';
+import getProductsCount from '../actions/getProductsCount';
 
-const Dashboard = ({ location }) => {
+const Dashboard = ({ location, history }) => {
   const [loading, setLoading] = useState(false); // eslint-disable-line
   const [token, setToken] = useState('');
 
   const getPermanentToken = async () => {
-    if (token.length > 0) return;
     setLoading(true);
 
     try {
       const get = await fetch(`${API_URL}/shopify/callback${location.search}`)
       const result = await get.json();
 
-      // hello
       setToken(result);
-      console.log(result);
     } catch (error) {
-      console.log(error);
+      history.push('/shopify?shop=inventory-manager-1991.myshopify.com');
     }
 
     setLoading(false);
   }
 
   useEffect(() => {
-    getPermanentToken()
+    getPermanentToken();
   }, []); // eslint-disable-line
 
   return (
-    <div>
+    <Segment
+      basic
+      loading={loading}
+      style={{ padding: 0 }}
+    >
       <Navbar />
-      <Statistic.Group>
-        <Statistic>
-          <Statistic.Value>22</Statistic.Value>
-          <Statistic.Label>Faves</Statistic.Label>
-        </Statistic>
-        <Statistic>
-          <Statistic.Value>31,200</Statistic.Value>
-          <Statistic.Label>Views</Statistic.Label>
-        </Statistic>
-      </Statistic.Group>
-    </div>
+      
+    </Segment>
   )
 }
 
