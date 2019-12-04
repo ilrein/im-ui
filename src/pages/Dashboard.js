@@ -8,7 +8,9 @@ import {
 import { withRouter } from 'react-router-dom';
 import fetch from 'isomorphic-fetch';
 
+// local
 import { API_URL } from '../constants';
+import Navbar from '../components/Navbar';
 
 const Dashboard = ({ location }) => {
   const [loading, setLoading] = useState(false); // eslint-disable-line
@@ -38,6 +40,7 @@ const Dashboard = ({ location }) => {
 
   return (
     <div>
+      <Navbar />
       <Statistic.Group>
         <Statistic>
           <Statistic.Value>22</Statistic.Value>
