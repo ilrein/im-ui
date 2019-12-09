@@ -29,7 +29,6 @@ const Dashboard = ({ location, history }) => {
 
       setShop(qs.parse(location.search).shop);
       setToken(result);
-      console.log(result);
     } catch (error) {
       history.push('/shopify?shop=inventory-manager-1991.myshopify.com');
     }
