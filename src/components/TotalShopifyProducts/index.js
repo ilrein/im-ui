@@ -4,10 +4,11 @@ import React, {
 } from 'react';
 import fetch from 'isomorphic-fetch';
 import { Statistic } from 'semantic-ui-react';
+import { connect } from 'react-redux';
 
 import { API_URL } from '../../constants';
 
-const TotalShopifyProducts = ({ token, shop }) => {
+const TotalShopifyProducts = ({ token, shop, stashProductCount }) => {
   const [count, setCount] = useState(0);
 
   const getProductsCount = async (token, shop) => {
@@ -22,6 +23,7 @@ const TotalShopifyProducts = ({ token, shop }) => {
       const result = await get.json();
   
       setCount(result.count);
+      stashProductCount(result.count);
     } catch (error) {
       return error;
     }
@@ -39,4 +41,12 @@ const TotalShopifyProducts = ({ token, shop }) => {
   )
 };
 
-export default TotalShopifyProducts;
+export default connect(
+  null,
+  dispatch => ({
+    stashProductCount: payload => dispatch({
+      type: 'STASH_PRODUCTS_COUNT_SHOPIFY',
+      payload,
+    })
+  })
+)(TotalShopifyProducts);
