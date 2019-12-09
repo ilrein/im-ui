@@ -16,7 +16,7 @@ const TotalShopifyProducts = ({
   const getProductsCount = async (token, shop) => {
     console.log('getting products count');
     try {
-      const get = await fetch(`${API_URL}/api/shopify/products/count.json`, {
+      const get = await fetch(`${API_URL}/api/shopify/count`, {
         headers: {
           token,
           shop,
