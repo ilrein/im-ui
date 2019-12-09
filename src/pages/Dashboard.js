@@ -8,13 +8,14 @@ import {
 import { withRouter } from 'react-router-dom';
 import fetch from 'isomorphic-fetch';
 import qs from 'query-string';
+import { connect } from 'react-redux';
 
 // local
 import { API_URL } from '../constants';
 import Navbar from '../components/Navbar';
 import InnerDashboard from '../containers/InnerDashboard';
 
-const Dashboard = ({ location, history }) => {
+const Dashboard = ({ location, history, stashSessionData }) => {
   const [loading, setLoading] = useState(false); // eslint-disable-line
   const [token, setToken] = useState(null);
   const [shop, setShop] = useState(null);
@@ -29,6 +30,11 @@ const Dashboard = ({ location, history }) => {
 
       setShop(qs.parse(location.search).shop);
       setToken(result);
+
+      stashSessionData({
+        shop: qs.parse(location.search).shop,
+        token: result,
+      })
     } catch (error) {
       history.push('/shopify?shop=inventory-manager-1991.myshopify.com');
     }
@@ -79,4 +85,12 @@ const Dashboard = ({ location, history }) => {
   )
 }
 
-export default withRouter(Dashboard);
+export default connect(
+  null,
+  dispatch => ({
+    stashSessionData: payload => dispatch({
+      type: 'STASH_SESSION_DATA',
+      payload,
+    })
+  }),
+)(withRouter(Dashboard));

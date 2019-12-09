@@ -35,6 +35,8 @@ const InnerDashboard = ({ shopify, shop, token }) => {
   const handleSync = async () => {
     setSyncing(true);
 
+    console.log('applying sync...');
+
     // 1. get total products in shopify db
     // const { count } = shopify.products;
     
@@ -50,12 +52,18 @@ const InnerDashboard = ({ shopify, shop, token }) => {
     const firstPageOfProductsFromShopify = await getProductsFromShopify();
 
     // console.log(firstPageOfProductsFromShopify);
+
     if (firstPageOfProductsFromShopify.meta) {
       let newUrl = '';
       newUrl = replace('<', '', firstPageOfProductsFromShopify.meta);
       newUrl = replace('>', '', newUrl);
 
       // newUrl is now a self-contained link
+      // time to issue another request
+      console.log(newUrl);
+      const nextPageOfData = await fetch(newUrl);
+
+      // console.log(nextPageOfData);
     }
 
     // 3. for each page, post all products to ES

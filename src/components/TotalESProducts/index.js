@@ -44,5 +44,5 @@ export default connect(
       type: 'STASH_PRODUCTS_COUNT_ES',
       payload,
     })
-  })
+  }),
 )(TotalESProducts);
