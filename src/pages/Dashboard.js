@@ -48,8 +48,6 @@ const Dashboard = ({ location, history }) => {
       const result = await get.json();
 
       setIndexExists(result);
-
-      console.log(result);
     } catch (error) {
       // no index exists
     }
