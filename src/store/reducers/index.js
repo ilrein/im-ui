@@ -2,11 +2,11 @@ import {
   combineReducers,
 } from 'redux';
 
-import productsReducer from './productsReducer';
+import shopifyReducer from './shopifyReducer';
 import sessionReducer from './sessionReducer';
 
 const rootReducer = combineReducers({
-  products: productsReducer,
+  shopify: shopifyReducer,
   session: sessionReducer,
 });
 

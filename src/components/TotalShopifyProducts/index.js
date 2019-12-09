@@ -1,5 +1,4 @@
 import React, {
-  useState,
   useEffect,
 } from 'react';
 import fetch from 'isomorphic-fetch';
@@ -8,10 +7,14 @@ import { connect } from 'react-redux';
 
 import { API_URL } from '../../constants';
 
-const TotalShopifyProducts = ({ token, shop, stashProductCount }) => {
-  const [count, setCount] = useState(0);
-
+const TotalShopifyProducts = ({
+  token,
+  shop,
+  stashProductCount,
+  shopify,
+}) => {
   const getProductsCount = async (token, shop) => {
+    console.log('getting products count');
     try {
       const get = await fetch(`${API_URL}/api/shopify/products/count.json`, {
         headers: {
@@ -22,9 +25,10 @@ const TotalShopifyProducts = ({ token, shop, stashProductCount }) => {
   
       const result = await get.json();
   
-      setCount(result.count);
       stashProductCount(result.count);
+      console.log(result.count);
     } catch (error) {
+      console.log(error);
       return error;
     }
   };
@@ -36,13 +40,13 @@ const TotalShopifyProducts = ({ token, shop, stashProductCount }) => {
   return (
     <Statistic
       label="Total Shopify Products"
-      value={count}
+      value={shopify.products.count}
     />
   )
 };
 
 export default connect(
-  null,
+  ({ shopify }) => ({ shopify }),
   dispatch => ({
     stashProductCount: payload => dispatch({
       type: 'STASH_PRODUCTS_COUNT_SHOPIFY',
