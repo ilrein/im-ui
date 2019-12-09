@@ -12,7 +12,7 @@ const TotalESProducts = ({ token, shop }) => {
 
   const getProductsCount = async (token, shop) => {
     try {
-      const get = await fetch(`${API_URL}/api/products/count`, {
+      const get = await fetch(`${API_URL}/api/shopify/products/count`, {
         headers: {
           token,
           shop,
