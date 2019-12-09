@@ -26,9 +26,9 @@ const TotalShopifyProducts = ({
       const result = await get.json();
   
       stashProductCount(result.count);
-      console.log(result.count);
+      // console.log(result.count);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return error;
     }
   };

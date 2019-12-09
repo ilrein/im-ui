@@ -17,7 +17,7 @@ const InnerDashboard = ({ shopify, shop, token }) => {
     setSyncing(true);
 
     // 1. get total products in shopify db - check
-    console.log(shopify);
+    // console.log(shopify);
     // 2. get products by page
     // 3. for each page, post all products to ES
     // 4. notify on success
