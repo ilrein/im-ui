@@ -15,12 +15,14 @@ import TotalESProducts from '../../components/TotalESProducts';
 const InnerDashboard = ({ shopify, shop, token }) => {
   const [syncing, setSyncing] = useState(false);
 
-  const getProductsFromShopify = async () => {
+  const getProductsFromShopify = async (page = null) => {
+    // console.log('page header', page);
     try {
       const get = await fetch(`${API_URL}/api/shopify/products`, {
         headers: {
           shop,
           token,
+          ...(page) && { page },
         },
       });
 
@@ -35,7 +37,7 @@ const InnerDashboard = ({ shopify, shop, token }) => {
   const handleSync = async () => {
     setSyncing(true);
 
-    console.log('applying sync...');
+    // console.log('applying sync...');
 
     // 1. get total products in shopify db
     // const { count } = shopify.products;
@@ -51,7 +53,7 @@ const InnerDashboard = ({ shopify, shop, token }) => {
 
     const firstPageOfProductsFromShopify = await getProductsFromShopify();
 
-    // console.log(firstPageOfProductsFromShopify);
+    console.log(firstPageOfProductsFromShopify);
 
     if (firstPageOfProductsFromShopify.meta) {
       let newUrl = '';
@@ -60,8 +62,15 @@ const InnerDashboard = ({ shopify, shop, token }) => {
 
       // newUrl is now a self-contained link
       // time to issue another request
-      console.log(newUrl);
-      const nextPageOfData = await fetch(newUrl);
+      // console.log('newUrl', newUrl);
+      
+      try {
+        const nextPageOfData = await getProductsFromShopify(newUrl);
+
+        console.log('nextPageOfData', nextPageOfData);
+      } catch (error) {
+        console.log('2nd page error', error); 
+      }
 
       // console.log(nextPageOfData);
     }
