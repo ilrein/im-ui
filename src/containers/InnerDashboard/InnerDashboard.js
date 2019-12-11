@@ -6,6 +6,7 @@ import {
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import replace from 'ramda/src/replace';
+import isNil from 'ramda/src/isNil';
 // import fetch from 'isomorphic-fetch';
 
 import { API_URL } from '../../constants';
@@ -14,9 +15,9 @@ import TotalESProducts from '../../components/TotalESProducts';
 
 const InnerDashboard = ({ shopify, shop, token }) => {
   const [syncing, setSyncing] = useState(false);
+  // const [data, setData] = useState([]);
 
   const getProductsFromShopify = async (page = null) => {
-    // console.log('page header', page);
     try {
       const get = await fetch(`${API_URL}/api/shopify/products`, {
         headers: {
@@ -37,48 +38,26 @@ const InnerDashboard = ({ shopify, shop, token }) => {
   const handleSync = async () => {
     setSyncing(true);
 
-    // console.log('applying sync...');
+    const totalPages = shopify.products.count / 2;
 
-    // 1. get total products in shopify db
-    // const { count } = shopify.products;
-    
-    // 2. get products by page
-    // how many pages are there?
-    // let totalPagesOfProducts = 1;
-    
+    // console.log(shopify.products.count, totalPages);
 
-    // if ((count / 250) < 1) {
-    //   console.log('less than 250 products in db');
-    // }
+    let allTheData = [];
+    let newUrl = null;
+    // loop through each of the pages
+    for (let index = 0; index < totalPages; index++) {
+      console.log('looping', index);
 
-    const firstPageOfProductsFromShopify = await getProductsFromShopify();
+      const page = await getProductsFromShopify(newUrl);
 
-    console.log(firstPageOfProductsFromShopify);
-
-    if (firstPageOfProductsFromShopify.meta) {
-      let newUrl = '';
-      newUrl = replace('<', '', firstPageOfProductsFromShopify.meta);
-      newUrl = replace('>', '', newUrl);
-
-      // newUrl is now a self-contained link
-      // time to issue another request
-      // console.log('newUrl', newUrl);
-      
-      try {
-        const nextPageOfData = await getProductsFromShopify(newUrl);
-
-        console.log('nextPageOfData', nextPageOfData);
-      } catch (error) {
-        console.log('2nd page error', error); 
+      if (page.meta) {
+        newUrl = replace('<', '', page.meta);
+        newUrl = replace('>', '', newUrl);
       }
 
-      // console.log(nextPageOfData);
+      // console.log(page);
+      allTheData.push(...page.data.products);
     }
-
-    // 3. for each page, post all products to ES
-    // 4. notify on success
-
-    // const totalPages = await fetch()
 
     setSyncing(false);
   }
