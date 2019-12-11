@@ -6,7 +6,7 @@ import {
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import replace from 'ramda/src/replace';
-import isNil from 'ramda/src/isNil';
+// import isNil from 'ramda/src/isNil';
 // import fetch from 'isomorphic-fetch';
 
 import { API_URL } from '../../constants';
@@ -35,6 +35,26 @@ const InnerDashboard = ({ shopify, shop, token }) => {
     }
   }
 
+  const copyData = async (data) => {
+    console.log('syncing to ES', data);
+    try {
+      const post = await fetch(`${API_URL}/api/es/products/sync`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          shop,
+        },
+        body: JSON.stringify(data.products),
+      });
+
+      const result = await post.json();
+
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleSync = async () => {
     setSyncing(true);
 
@@ -42,12 +62,10 @@ const InnerDashboard = ({ shopify, shop, token }) => {
 
     // console.log(shopify.products.count, totalPages);
 
-    let allTheData = [];
+    // let allTheData = [];
     let newUrl = null;
     // loop through each of the pages
     for (let index = 0; index < totalPages; index++) {
-      console.log('looping', index);
-
       const page = await getProductsFromShopify(newUrl);
 
       if (page.meta) {
@@ -55,8 +73,11 @@ const InnerDashboard = ({ shopify, shop, token }) => {
         newUrl = replace('>', '', newUrl);
       }
 
-      // console.log(page);
-      allTheData.push(...page.data.products);
+      // console.log('looping', index, page);
+      // allTheData.push(...page.data.products);
+
+      // lets do a bulk insert with this new data
+      await copyData(page.data);
     }
 
     setSyncing(false);
