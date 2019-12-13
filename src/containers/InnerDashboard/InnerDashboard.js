@@ -3,7 +3,8 @@ import {
   Container,
   Button,
   Segment,
-  Input,
+  Form,
+  Table,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import replace from 'ramda/src/replace';
@@ -17,7 +18,8 @@ import TotalESProducts from '../../components/TotalESProducts';
 const InnerDashboard = ({ shopify, shop, token }) => {
   const [syncing, setSyncing] = useState(false);
   const [searching, setSearching] = useState(false);
-  // const [data, setData] = useState([]);
+  const [query, setQuery] = useState('');
+  const [data, setData] = useState([]);
 
   const getProductsFromShopify = async (page = null) => {
     try {
@@ -79,15 +81,21 @@ const InnerDashboard = ({ shopify, shop, token }) => {
     setSyncing(false);
   }
 
-  const search = async () => {
+  const handleSearch = async () => {
     setSearching(true);
 
+    console.log('searching...', query);
+
     try {
-      const get = await fetch(`${API_URL}`)
+      const get = await fetch(`${API_URL}/api/es/products?search=${query}`, {
+        headers: {
+          shop,
+        },
+      });
 
-      const searchResult = get.json();
+      const searchResult = await get.json();
 
-      console.log(searchResult);
+      setData(searchResult);
     } catch (error) {
       console.log(error);
     }
@@ -120,14 +128,48 @@ const InnerDashboard = ({ shopify, shop, token }) => {
         </Button>
       </Segment>
 
-      <Segment>
-        <Input
-          action="Search"
+      <Form>
+        <Form.Input
+          action={{
+            color: 'teal',
+            content: 'Search',
+            onClick: () => handleSearch(),
+          }}
+          onChange={(event, { value }) => setQuery(value)}
           placeholder="Search Products"
-          onClick={search}
           loading={searching}
         />
-      </Segment>
+      </Form>
+
+      {
+        data.length > 0
+          ? (
+            <>
+              <Table celled>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>Title</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+
+                <Table.Body>
+                  {
+                    data.map(({ _source }) => (
+                      <Table.Row
+                        key={_source.id}
+                      >
+                        <Table.Cell>
+                          {_source.title}
+                        </Table.Cell>
+                      </Table.Row>
+                    ))
+                  }
+                </Table.Body>
+              </Table>
+            </>
+          )
+          : null
+      }
     </Container>
   )
 }
