@@ -3,6 +3,7 @@ import {
   Container,
   Button,
   Segment,
+  Input,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import replace from 'ramda/src/replace';
@@ -15,6 +16,7 @@ import TotalESProducts from '../../components/TotalESProducts';
 
 const InnerDashboard = ({ shopify, shop, token }) => {
   const [syncing, setSyncing] = useState(false);
+  const [searching, setSearching] = useState(false);
   // const [data, setData] = useState([]);
 
   const getProductsFromShopify = async (page = null) => {
@@ -58,13 +60,10 @@ const InnerDashboard = ({ shopify, shop, token }) => {
   const handleSync = async () => {
     setSyncing(true);
 
-    const totalPages = shopify.products.count / 2;
+    const limit = 2;
+    const totalPages = shopify.products.count / limit;
 
-    // console.log(shopify.products.count, totalPages);
-
-    // let allTheData = [];
     let newUrl = null;
-    // loop through each of the pages
     for (let index = 0; index < totalPages; index++) {
       const page = await getProductsFromShopify(newUrl);
 
@@ -73,14 +72,27 @@ const InnerDashboard = ({ shopify, shop, token }) => {
         newUrl = replace('>', '', newUrl);
       }
 
-      // console.log('looping', index, page);
-      // allTheData.push(...page.data.products);
-
       // lets do a bulk insert with this new data
       await copyData(page.data);
     }
 
     setSyncing(false);
+  }
+
+  const search = async () => {
+    setSearching(true);
+
+    try {
+      const get = await fetch(`${API_URL}`)
+
+      const searchResult = get.json();
+
+      console.log(searchResult);
+    } catch (error) {
+      console.log(error);
+    }
+
+    setSearching(false);
   }
 
   return (
@@ -106,6 +118,15 @@ const InnerDashboard = ({ shopify, shop, token }) => {
         >
           Sync Now
         </Button>
+      </Segment>
+
+      <Segment>
+        <Input
+          action="Search"
+          placeholder="Search Products"
+          onClick={search}
+          loading={searching}
+        />
       </Segment>
     </Container>
   )
