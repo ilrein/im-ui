@@ -84,8 +84,6 @@ const InnerDashboard = ({ shopify, shop, token }) => {
   const handleSearch = async () => {
     setSearching(true);
 
-    console.log('searching...', query);
-
     try {
       const get = await fetch(`${API_URL}/api/es/products?search=${query}`, {
         headers: {
@@ -96,6 +94,8 @@ const InnerDashboard = ({ shopify, shop, token }) => {
       const searchResult = await get.json();
 
       setData(searchResult);
+
+      console.log(searchResult);
     } catch (error) {
       console.log(error);
     }
