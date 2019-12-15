@@ -5,6 +5,8 @@ import {
   Segment,
   Form,
   Table,
+  Dimmer,
+  Loader,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import replace from 'ramda/src/replace';
@@ -134,15 +136,28 @@ const InnerDashboard = ({ shopify, shop, token }) => {
             color: 'teal',
             content: 'Search',
             onClick: () => handleSearch(),
+            // loading: searching,
           }}
           onChange={(event, { value }) => setQuery(value)}
           placeholder="Search Products"
-          loading={searching}
         />
       </Form>
 
       {
+        searching
+          ? (
+            <Segment style={{ height: '10rem' }}>
+              <Dimmer active inverted>
+                <Loader inverted content="Loading" />
+              </Dimmer>
+            </Segment>
+          )
+          : null
+      }
+
+      {
         data.length > 0
+        && !searching
           ? (
             <>
               <Table celled>
