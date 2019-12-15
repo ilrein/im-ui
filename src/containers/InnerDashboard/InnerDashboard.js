@@ -37,6 +37,7 @@ const InnerDashboard = ({
   const [searching, setSearching] = useState(false);
   const [query, setQuery] = useState('');
   const [data, setData] = useState([]);
+  const [hasSearchedOnce, setHasSearchedOnce] = useState(false);
 
   const getProductsFromShopify = async (page = null) => {
     try {
@@ -99,6 +100,7 @@ const InnerDashboard = ({
   }
 
   const handleSearch = async () => {
+    setHasSearchedOnce(true);
     setSearching(true);
 
     try {
@@ -197,6 +199,32 @@ const InnerDashboard = ({
                       </HoverableRow>
                     ))
                   }
+                </Table.Body>
+              </Table>
+            </>
+          )
+          : null
+      }
+
+      {
+        data.length === 0
+        && !searching
+        && hasSearchedOnce
+          ? (
+            <>
+              <Table celled>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>Title</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+
+                <Table.Body>
+                  <Table.Row>
+                    <Table.Cell>
+                      No matches found.
+                    </Table.Cell>
+                  </Table.Row>
                 </Table.Body>
               </Table>
             </>
