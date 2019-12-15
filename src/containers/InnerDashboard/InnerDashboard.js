@@ -10,14 +10,29 @@ import {
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import replace from 'ramda/src/replace';
-// import isNil from 'ramda/src/isNil';
-// import fetch from 'isomorphic-fetch';
+import styled from 'styled-components';
+import { withRouter } from 'react-router-dom';
 
 import { API_URL } from '../../constants';
 import TotalShopifyProducts from '../../components/TotalShopifyProducts';
 import TotalESProducts from '../../components/TotalESProducts';
 
-const InnerDashboard = ({ shopify, shop, token }) => {
+const HoverableRow = styled(Table.Row)`
+  transition: all 0.25s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #eee;
+  }
+`;
+
+const InnerDashboard = ({
+  history,
+  shopify,
+  shop,
+  token,
+  stashProduct,
+}) => {
   const [syncing, setSyncing] = useState(false);
   const [searching, setSearching] = useState(false);
   const [query, setQuery] = useState('');
@@ -136,7 +151,6 @@ const InnerDashboard = ({ shopify, shop, token }) => {
             color: 'teal',
             content: 'Search',
             onClick: () => handleSearch(),
-            // loading: searching,
           }}
           onChange={(event, { value }) => setQuery(value)}
           placeholder="Search Products"
@@ -169,14 +183,18 @@ const InnerDashboard = ({ shopify, shop, token }) => {
 
                 <Table.Body>
                   {
-                    data.map(({ _source }) => (
-                      <Table.Row
-                        key={_source.id}
+                    data.map((product) => (
+                      <HoverableRow
+                        key={product._id}
+                        onClick={() => {
+                          stashProduct(product)
+                          history.push(`/product/${product._id}`);
+                        }}
                       >
                         <Table.Cell>
-                          {_source.title}
+                          {product._source.title}
                         </Table.Cell>
-                      </Table.Row>
+                      </HoverableRow>
                     ))
                   }
                 </Table.Body>
@@ -191,4 +209,10 @@ const InnerDashboard = ({ shopify, shop, token }) => {
 
 export default connect(
   ({ shopify }) => ({ shopify }),
-)(InnerDashboard);
+  dispatch => ({
+    stashProduct: payload => dispatch({
+      type: 'STASH_PRODUCT',
+      payload,
+    })
+  }),
+)(withRouter(InnerDashboard));

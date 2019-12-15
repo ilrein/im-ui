@@ -8,6 +8,7 @@ import {
 import Dashboard from './pages/Dashboard';
 import Home from './pages/Home';
 import Shopify from './pages/Shopify';
+import Product from './pages/Product';
 
 const Routes = () => (
   <Router>
@@ -20,6 +21,9 @@ const Routes = () => (
       </Route>
       <Route path="/dashboard">
         <Dashboard />
+      </Route>
+      <Route path="/product/:id">
+        <Product />
       </Route>
     </Switch>
   </Router>
