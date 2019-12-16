@@ -114,12 +114,17 @@ const InnerDashboard = ({
 
       setData(searchResult);
 
-      console.log(searchResult);
+      // console.log(searchResult);
     } catch (error) {
       console.log(error);
     }
 
     setSearching(false);
+  }
+
+  const handleRowClick = async (product) => {
+    stashProduct(product);
+    console.log(product);
   }
 
   return (
@@ -188,10 +193,7 @@ const InnerDashboard = ({
                     data.map((product) => (
                       <HoverableRow
                         key={product._id}
-                        onClick={() => {
-                          stashProduct(product)
-                          history.push(`/product/${product._id}`);
-                        }}
+                        onClick={() => handleRowClick(product)}
                       >
                         <Table.Cell>
                           {product._source.title}

@@ -11,7 +11,6 @@ import { connect } from 'react-redux';
 
 // local
 // import { API_URL } from '../constants';
-import Navbar from '../components/Navbar';
 
 const Product = ({ product }) => {
   const { _source } = product;
@@ -21,10 +20,6 @@ const Product = ({ product }) => {
       basic
       style={{ padding: 0 }}
     >
-      <Navbar
-        hasBack
-      />
-      
       <Segment
         style={{ margin: '0 4rem' }}
       >

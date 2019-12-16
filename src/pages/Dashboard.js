@@ -15,7 +15,12 @@ import { API_URL } from '../constants';
 import Navbar from '../components/Navbar';
 import InnerDashboard from '../containers/InnerDashboard';
 
-const Dashboard = ({ location, history, stashSessionData }) => {
+const Dashboard = ({
+  location,
+  history,
+  stashSessionData,
+  session,
+}) => {
   const [loading, setLoading] = useState(false); // eslint-disable-line
   const [token, setToken] = useState(null);
   const [shop, setShop] = useState(null);
@@ -36,7 +41,7 @@ const Dashboard = ({ location, history, stashSessionData }) => {
         token: result,
       })
     } catch (error) {
-      history.push('/shopify?shop=inventory-manager-1991.myshopify.com');
+      history.push(`/shopify?shop=${session.shop}`);
     }
 
     setLoading(false);
@@ -86,7 +91,7 @@ const Dashboard = ({ location, history, stashSessionData }) => {
 }
 
 export default connect(
-  null,
+  ({ session }) => ({ session }),
   dispatch => ({
     stashSessionData: payload => dispatch({
       type: 'STASH_SESSION_DATA',

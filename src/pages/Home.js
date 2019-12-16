@@ -2,6 +2,7 @@ import React, {
   useState,
 } from 'react';
 import {
+  Header,
   Container,
   Form,
 } from 'semantic-ui-react';
@@ -11,9 +12,7 @@ import { withRouter } from 'react-router-dom';
 import { API_URL } from '../constants';
 
 const Home = ({ location }) => {
-  const [loading, setLoading] = useState(false); // eslint-disable-line
-
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState('inventory-manager-1991.myshopify.com');
 
   const submit = async () => {
     try {
@@ -26,7 +25,6 @@ const Home = ({ location }) => {
       const result = await get.json();
 
       window.location.href = result;
-      // console.log(result);
     } catch (error) {
       console.log(error);
     }
@@ -36,17 +34,20 @@ const Home = ({ location }) => {
     <Container
       style={{ marginTop: '1rem' }}
     >
+      <Header>
+        Welcome to IM!
+      </Header>
       <Form>
         <Form.Input
           placeholder="Shop name"
           onChange={(event, { value }) => setValue(value)}
-          defaultValue="inventory-manager-1991.myshopify.com"
+          value={value}
         />
 
         <Form.Button
           onClick={submit}
         >
-          Submit
+          Install App
         </Form.Button>
       </Form>
     </Container>
