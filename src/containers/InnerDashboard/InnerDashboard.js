@@ -31,6 +31,7 @@ const InnerDashboard = ({
   shop,
   token,
   stashProduct,
+  stashProducts,
 }) => {
   const [syncing, setSyncing] = useState(false);
   const [searching, setSearching] = useState(false);
@@ -112,8 +113,7 @@ const InnerDashboard = ({
       const searchResult = await get.json();
 
       setData(searchResult);
-
-      // console.log(searchResult);
+      stashProducts(searchResult);
     } catch (error) {
       console.log(error);
     }
@@ -183,6 +183,7 @@ const InnerDashboard = ({
               <Table celled>
                 <Table.Header>
                   <Table.Row>
+                    <Table.HeaderCell>ID</Table.HeaderCell>
                     <Table.HeaderCell>Title</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
@@ -194,6 +195,9 @@ const InnerDashboard = ({
                         key={product._id}
                         onClick={() => handleRowClick(product)}
                       >
+                        <Table.Cell>
+                          {product._source.id}
+                        </Table.Cell>
                         <Table.Cell>
                           {product._source.title}
                         </Table.Cell>
@@ -214,12 +218,6 @@ const InnerDashboard = ({
           ? (
             <>
               <Table celled>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>Title</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-
                 <Table.Body>
                   <Table.Row>
                     <Table.Cell>
@@ -242,6 +240,10 @@ export default connect(
     stashProduct: payload => dispatch({
       type: 'STASH_PRODUCT',
       payload,
-    })
+    }),
+    stashProducts: payload => dispatch({
+      type: 'STASH_PRODUCTS_ES',
+      payload,
+    }),
   }),
 )(withRouter(InnerDashboard));

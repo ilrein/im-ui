@@ -11,6 +11,13 @@ function esReducer(state = {
           count: action.payload,
         }
       };
+    case 'STASH_PRODUCTS_ES':
+        return {
+          products: {
+            ...state.products,
+            products: action.payload,
+          }
+        };
     default:
       return state;
   }
