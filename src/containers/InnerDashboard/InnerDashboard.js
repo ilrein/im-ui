@@ -27,7 +27,6 @@ const HoverableRow = styled(Table.Row)`
 `;
 
 const InnerDashboard = ({
-  history,
   shopify,
   shop,
   token,
