@@ -3,32 +3,59 @@ import React, {
   // useEffect,
 } from 'react';
 import {
-  Segment,
+  Modal,
+  Button,
+  Icon,
+  Header,
+  // Form,
 } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
-// import fetch from 'isomorphic-fetch';
 import { connect } from 'react-redux';
 
-// local
-// import { API_URL } from '../constants';
-
-const Product = ({ product }) => {
-  const { _source } = product;
-
+const ProductModal = ({
+  open,
+  handleClose,
+  product,
+}) => {
   return (
-    <Segment
-      basic
-      style={{ padding: 0 }}
+    <Modal
+      open={open}
+      onClose={handleClose}
+      size="small"
     >
-      <Segment
-        style={{ margin: '0 4rem' }}
-      >
-        {_source.id}
-      </Segment>
-    </Segment>
+      <Header
+        content="Product"
+      />
+      <Modal.Content>
+        <h4>
+          {product._source.title}
+        </h4>
+      </Modal.Content>
+      <Modal.Actions>
+        <Button
+          onClick={handleClose}
+        >
+          Cancel
+        </Button>
+        <Button
+          color="green"
+          onClick={handleClose}
+          inverted
+        >
+          <Icon name="checkmark" /> Update
+        </Button>
+      </Modal.Actions>
+    </Modal>
   )
 }
 
 export default connect(
-  ({ product }) => ({ product }),
-)(withRouter(Product));
+  // ({ ui }) => ({ ui }),
+  // dispatch => ({
+  //   changePropVisibility: (key, payload) => dispatch({
+  //     type: 'CHANGE_PROP_VISIBILITY',
+  //     key,
+  //     payload,
+  //   })
+  // }),
+)(withRouter(ProductModal));

@@ -3,7 +3,6 @@ import {
   Container,
   Button,
   Segment,
-  // Input,
   Table,
   Dimmer,
   Loader,
@@ -19,6 +18,7 @@ import { API_URL } from '../../constants';
 import TotalShopifyProducts from '../../components/TotalShopifyProducts';
 import TotalESProducts from '../../components/TotalESProducts';
 import ConfigureModal from '../../components/ConfigureModal';
+import ProductModal from '../../components/ProductModal';
 
 const HoverableRow = styled(Table.Row)`
   transition: all 0.25s ease-in-out;
@@ -29,6 +29,10 @@ const HoverableRow = styled(Table.Row)`
   }
 `;
 
+const DynamicHeaderCell = styled(Table.HeaderCell)`
+  display: ${props => props.visible ? 'table-cell' : 'none'};
+`;
+
 const DynamicCell = styled(Table.Cell)`
   display: ${props => props.visible ? 'table-cell' : 'none'};
 `;
@@ -37,7 +41,6 @@ const InnerDashboard = ({
   shopify,
   shop,
   token,
-  stashProduct,
   stashProducts,
   ui,
 }) => {
@@ -47,6 +50,8 @@ const InnerDashboard = ({
   const [data, setData] = useState([]);
   const [hasSearchedOnce, setHasSearchedOnce] = useState(false);
   const [configureModalIsOpen, setConfigureModalIsOpen] = useState(false);
+  const [productModalIsOpen, setProductModalIsOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const getProductsFromShopify = async (page = null) => {
     try {
@@ -67,7 +72,6 @@ const InnerDashboard = ({
   }
 
   const copyData = async (data) => {
-    console.log('syncing to ES', data);
     try {
       const post = await fetch(`${API_URL}/api/es/products/sync`, {
         method: 'POST',
@@ -131,12 +135,8 @@ const InnerDashboard = ({
   }
 
   const handleRowClick = async (product) => {
-    stashProduct(product);
-    console.log(product);
-  }
-
-  const onApply = () => {
-    console.log('applying');
+    setSelectedProduct(product);
+    setProductModalIsOpen(true);
   }
 
   return (
@@ -197,8 +197,18 @@ const InnerDashboard = ({
           <ConfigureModal
             open={configureModalIsOpen}
             handleClose={() => setConfigureModalIsOpen(false)}
-            onApply={onApply}
           />
+          {
+            selectedProduct
+              ? (
+                <ProductModal
+                  open={productModalIsOpen}
+                  handleClose={() => setProductModalIsOpen(false)}
+                  product={selectedProduct}
+                />
+              )
+              : null
+          }
         </div>
       </Form>
 
@@ -227,12 +237,12 @@ const InnerDashboard = ({
                   <Table.Row>
                     {
                       ui.properties.map((property) => (
-                        <DynamicCell
+                        <DynamicHeaderCell
                           key={property.key}
                           visible={property.visible}
                         >
                           {property.key}
-                        </DynamicCell>
+                        </DynamicHeaderCell>
                       ))
                     }
                   </Table.Row>
@@ -331,10 +341,10 @@ const InnerDashboard = ({
 export default connect(
   ({ shopify, ui }) => ({ shopify, ui }),
   dispatch => ({
-    stashProduct: payload => dispatch({
-      type: 'STASH_PRODUCT',
-      payload,
-    }),
+    // stashProduct: payload => dispatch({
+    //   type: 'STASH_PRODUCT',
+    //   payload,
+    // }),
     stashProducts: payload => dispatch({
       type: 'STASH_PRODUCTS_ES',
       payload,

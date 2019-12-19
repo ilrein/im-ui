@@ -43,9 +43,14 @@ function uiReducer(state = {
   ],
 }, action) {
   switch (action.type) {
-    case 'CHANGE_VISIBLE_PROPERTIES':
+    case 'CHANGE_PROP_VISIBILITY':
+      const itemToChange = state.properties.find(prop => prop.key === action.key);
+      itemToChange.visible = action.payload;
+
       return {
-        properties: action.payload,
+        properties: [
+          ...state.properties,
+        ]
       };
     default:
       return state;

@@ -16,7 +16,7 @@ const ConfigureModal = ({
   ui,
   open,
   handleClose,
-  onApply,
+  changePropVisibility,
 }) => {
   return (
     <Modal
@@ -39,6 +39,10 @@ const ConfigureModal = ({
               <Form.Checkbox
                 label={property.key}
                 checked={property.visible}
+                onChange={(event, { checked }) => {
+                  // console.log('change', checked);
+                  changePropVisibility(property.key, checked);
+                }}
               />
             ))
           }
@@ -46,16 +50,11 @@ const ConfigureModal = ({
       </Modal.Content>
       <Modal.Actions>
         <Button
-          onClick={handleClose}
-        >
-          Cancel
-        </Button>
-        <Button
           color="green"
-          onClick={onApply}
+          onClick={handleClose}
           inverted
         >
-          <Icon name="checkmark" /> Apply
+          <Icon name="checkmark" /> Done
         </Button>
       </Modal.Actions>
     </Modal>
@@ -64,4 +63,11 @@ const ConfigureModal = ({
 
 export default connect(
   ({ ui }) => ({ ui }),
+  dispatch => ({
+    changePropVisibility: (key, payload) => dispatch({
+      type: 'CHANGE_PROP_VISIBILITY',
+      key,
+      payload,
+    })
+  }),
 )(withRouter(ConfigureModal));
