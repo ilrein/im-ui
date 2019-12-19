@@ -1,7 +1,4 @@
-import React, {
-  // useState,
-  // useEffect,
-} from 'react';
+import React from 'react';
 import {
   Modal,
   Button,
@@ -37,12 +34,10 @@ const ConfigureModal = ({
           {
             ui.properties.map(property => (
               <Form.Checkbox
+                key={property.key}
                 label={property.key}
                 checked={property.visible}
-                onChange={(event, { checked }) => {
-                  // console.log('change', checked);
-                  changePropVisibility(property.key, checked);
-                }}
+                onChange={(event, { checked }) => changePropVisibility(property.key, checked)}
               />
             ))
           }
