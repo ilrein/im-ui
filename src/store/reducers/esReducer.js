@@ -15,7 +15,7 @@ function esReducer(state = {
         return {
           products: {
             ...state.products,
-            products: action.payload,
+            list: action.payload,
           }
         };
     default:

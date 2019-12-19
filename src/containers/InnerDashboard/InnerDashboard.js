@@ -3,10 +3,12 @@ import {
   Container,
   Button,
   Segment,
-  Form,
+  // Input,
   Table,
   Dimmer,
   Loader,
+  Header,
+  Form,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import replace from 'ramda/src/replace';
@@ -26,12 +28,17 @@ const HoverableRow = styled(Table.Row)`
   }
 `;
 
+const DynamicCell = styled(Table.Cell)`
+  display: ${props => props.visible ? 'table-cell' : 'none'};
+`;
+
 const InnerDashboard = ({
   shopify,
   shop,
   token,
   stashProduct,
   stashProducts,
+  ui,
 }) => {
   const [syncing, setSyncing] = useState(false);
   const [searching, setSearching] = useState(false);
@@ -111,6 +118,7 @@ const InnerDashboard = ({
       });
 
       const searchResult = await get.json();
+      console.log('searchResult', searchResult);
 
       setData(searchResult);
       stashProducts(searchResult);
@@ -151,16 +159,37 @@ const InnerDashboard = ({
         </Button>
       </Segment>
 
-      <Form>
-        <Form.Input
-          action={{
-            color: 'teal',
-            content: 'Search',
-            onClick: () => handleSearch(),
-          }}
-          onChange={(event, { value }) => setQuery(value)}
-          placeholder="Search Products"
-        />
+      <Form
+        as={Segment}
+      >
+        <Header>
+          Search Products
+        </Header>
+        <div
+          class="search-products-input"
+        >
+          <Form.Input
+            action={{
+              color: 'teal',
+              content: 'Search',
+              onClick: () => handleSearch(),
+            }}
+            onChange={(event, { value }) => setQuery(value)}
+            placeholder="Search Products"
+            style={{ flex: 0.85 }}
+          />
+
+          <Button
+            style={{
+              flex: 0.1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              display: 'flex',
+            }}
+          >
+            Configure
+          </Button>
+        </div>
       </Form>
 
       {
@@ -180,11 +209,21 @@ const InnerDashboard = ({
         && !searching
           ? (
             <>
-              <Table celled>
+              <Table
+                celled
+                stackable
+              >
                 <Table.Header>
                   <Table.Row>
-                    <Table.HeaderCell>ID</Table.HeaderCell>
-                    <Table.HeaderCell>Title</Table.HeaderCell>
+                    {
+                      ui.visibleProperties.map((property) => (
+                        <Table.Cell
+                          key={property}
+                        >
+                          {property}
+                        </Table.Cell>
+                      ))
+                    }
                   </Table.Row>
                 </Table.Header>
 
@@ -195,12 +234,56 @@ const InnerDashboard = ({
                         key={product._id}
                         onClick={() => handleRowClick(product)}
                       >
-                        <Table.Cell>
+                        <DynamicCell
+                          visible={ui.visibleProperties.includes('id')}
+                        >
                           {product._source.id}
-                        </Table.Cell>
-                        <Table.Cell>
+                        </DynamicCell>
+                        <DynamicCell
+                          visible={ui.visibleProperties.includes('title')}
+                        >
                           {product._source.title}
-                        </Table.Cell>
+                        </DynamicCell>
+                        <DynamicCell
+                          visible={ui.visibleProperties.includes('body_html')}
+                        >
+                          {product._source.body_html}
+                        </DynamicCell>
+                        <DynamicCell
+                          visible={ui.visibleProperties.includes('vendor')}
+                        >
+                          {product._source.vendor}
+                        </DynamicCell>
+                        <DynamicCell
+                          visible={ui.visibleProperties.includes('product_type')}
+                        >
+                          {product._source.product_type}
+                        </DynamicCell>
+                        <DynamicCell
+                          visible={ui.visibleProperties.includes('created_at')}
+                        >
+                          {product._source.created_at}
+                        </DynamicCell>
+                        <DynamicCell
+                          visible={ui.visibleProperties.includes('handle')}
+                        >
+                          {product._source.handle}
+                        </DynamicCell>
+                        <DynamicCell
+                          visible={ui.visibleProperties.includes('updated_at')}
+                        >
+                          {product._source.updated_at}
+                        </DynamicCell>
+                        <DynamicCell
+                          visible={ui.visibleProperties.includes('published_at')}
+                        >
+                          {product._source.published_at}
+                        </DynamicCell>
+                        <DynamicCell
+                          visible={ui.visibleProperties.includes('tags')}
+                        >
+                          {product._source.tags}
+                        </DynamicCell>
                       </HoverableRow>
                     ))
                   }
@@ -235,7 +318,7 @@ const InnerDashboard = ({
 }
 
 export default connect(
-  ({ shopify }) => ({ shopify }),
+  ({ shopify, ui }) => ({ shopify, ui }),
   dispatch => ({
     stashProduct: payload => dispatch({
       type: 'STASH_PRODUCT',
