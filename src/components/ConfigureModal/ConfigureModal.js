@@ -35,9 +35,10 @@ const ConfigureModal = ({
 
         <Form>
           {
-            ui.visibleProperties.map(property => (
+            ui.properties.map(property => (
               <Form.Checkbox
-                label={property}
+                label={property.key}
+                checked={property.visible}
               />
             ))
           }
@@ -46,7 +47,6 @@ const ConfigureModal = ({
       <Modal.Actions>
         <Button
           onClick={handleClose}
-          inverted
         >
           Cancel
         </Button>

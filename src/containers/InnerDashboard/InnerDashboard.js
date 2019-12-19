@@ -135,8 +135,8 @@ const InnerDashboard = ({
     console.log(product);
   }
 
-  const configure = () => {
-
+  const onApply = () => {
+    console.log('applying');
   }
 
   return (
@@ -197,6 +197,7 @@ const InnerDashboard = ({
           <ConfigureModal
             open={configureModalIsOpen}
             handleClose={() => setConfigureModalIsOpen(false)}
+            onApply={onApply}
           />
         </div>
       </Form>
@@ -225,12 +226,13 @@ const InnerDashboard = ({
                 <Table.Header>
                   <Table.Row>
                     {
-                      ui.visibleProperties.map((property) => (
-                        <Table.Cell
-                          key={property}
+                      ui.properties.map((property) => (
+                        <DynamicCell
+                          key={property.key}
+                          visible={property.visible}
                         >
-                          {property}
-                        </Table.Cell>
+                          {property.key}
+                        </DynamicCell>
                       ))
                     }
                   </Table.Row>
@@ -244,52 +246,52 @@ const InnerDashboard = ({
                         onClick={() => handleRowClick(product)}
                       >
                         <DynamicCell
-                          visible={ui.visibleProperties.includes('id')}
+                          visible={ui.properties.find(element => element.key === 'id' && element.visible === true)}
                         >
                           {product._source.id}
                         </DynamicCell>
                         <DynamicCell
-                          visible={ui.visibleProperties.includes('title')}
+                          visible={ui.properties.find(element => element.key === 'title' && element.visible === true)}
                         >
                           {product._source.title}
                         </DynamicCell>
                         <DynamicCell
-                          visible={ui.visibleProperties.includes('body_html')}
+                          visible={ui.properties.find(element => element.key === 'body_html' && element.visible === true)}
                         >
                           {product._source.body_html}
                         </DynamicCell>
                         <DynamicCell
-                          visible={ui.visibleProperties.includes('vendor')}
+                          visible={ui.properties.find(element => element.key === 'vendor' && element.visible === true)}
                         >
                           {product._source.vendor}
                         </DynamicCell>
                         <DynamicCell
-                          visible={ui.visibleProperties.includes('product_type')}
+                          visible={ui.properties.find(element => element.key === 'product_type' && element.visible === true)}
                         >
                           {product._source.product_type}
                         </DynamicCell>
                         <DynamicCell
-                          visible={ui.visibleProperties.includes('created_at')}
+                          visible={ui.properties.find(element => element.key === 'created_at' && element.visible === true)}
                         >
                           {product._source.created_at}
                         </DynamicCell>
                         <DynamicCell
-                          visible={ui.visibleProperties.includes('handle')}
+                          visible={ui.properties.find(element => element.key === 'handle' && element.visible === true)}
                         >
                           {product._source.handle}
                         </DynamicCell>
                         <DynamicCell
-                          visible={ui.visibleProperties.includes('updated_at')}
+                          visible={ui.properties.find(element => element.key === 'updated_at' && element.visible === true)}
                         >
                           {product._source.updated_at}
                         </DynamicCell>
                         <DynamicCell
-                          visible={ui.visibleProperties.includes('published_at')}
+                          visible={ui.properties.find(element => element.key === 'published_at' && element.visible === true)}
                         >
                           {product._source.published_at}
                         </DynamicCell>
                         <DynamicCell
-                          visible={ui.visibleProperties.includes('tags')}
+                          visible={ui.properties.find(element => element.key === 'tags' && element.visible === true)}
                         >
                           {product._source.tags}
                         </DynamicCell>

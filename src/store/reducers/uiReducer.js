@@ -1,21 +1,51 @@
 function uiReducer(state = {
-  visibleProperties: [
-    'id',
-    'title',
-    'body_html',
-    'vendor',
-    'product_type',
-    'created_at',
-    'handle',
-    'updated_at',
-    'published_at',
-    'tags',
+  properties: [
+    {
+      key: 'id',
+      visible: true,
+    },
+    {
+      key: 'title',
+      visible: true,
+    },
+    {
+      key: 'body_html',
+      visible: true,
+    },
+    {
+      key: 'vendor',
+      visible: true,
+    },
+    {
+      key: 'product_type',
+      visible: true,
+    },
+    {
+      key: 'created_at',
+      visible: true,
+    },
+    {
+      key: 'handle',
+      visible: true,
+    },
+    {
+      key: 'updated_at',
+      visible: true,
+    },
+    {
+      key: 'published_at',
+      visible: false,
+    },
+    {
+      key: 'tags',
+      visible: true,
+    }
   ],
 }, action) {
   switch (action.type) {
     case 'CHANGE_VISIBLE_PROPERTIES':
       return {
-        visibleProperties: action.payload,
+        properties: action.payload,
       };
     default:
       return state;
