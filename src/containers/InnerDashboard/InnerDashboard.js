@@ -18,6 +18,7 @@ import { withRouter } from 'react-router-dom';
 import { API_URL } from '../../constants';
 import TotalShopifyProducts from '../../components/TotalShopifyProducts';
 import TotalESProducts from '../../components/TotalESProducts';
+import ConfigureModal from '../../components/ConfigureModal';
 
 const HoverableRow = styled(Table.Row)`
   transition: all 0.25s ease-in-out;
@@ -45,6 +46,7 @@ const InnerDashboard = ({
   const [query, setQuery] = useState('');
   const [data, setData] = useState([]);
   const [hasSearchedOnce, setHasSearchedOnce] = useState(false);
+  const [configureModalIsOpen, setConfigureModalIsOpen] = useState(false);
 
   const getProductsFromShopify = async (page = null) => {
     try {
@@ -118,7 +120,6 @@ const InnerDashboard = ({
       });
 
       const searchResult = await get.json();
-      console.log('searchResult', searchResult);
 
       setData(searchResult);
       stashProducts(searchResult);
@@ -132,6 +133,10 @@ const InnerDashboard = ({
   const handleRowClick = async (product) => {
     stashProduct(product);
     console.log(product);
+  }
+
+  const configure = () => {
+
   }
 
   return (
@@ -159,20 +164,19 @@ const InnerDashboard = ({
         </Button>
       </Segment>
 
-      <Form
-        as={Segment}
-      >
+      <Form>
         <Header>
           Search Products
         </Header>
         <div
-          class="search-products-input"
+          className="search-products-input"
         >
           <Form.Input
             action={{
               color: 'teal',
               content: 'Search',
               onClick: () => handleSearch(),
+              type: 'submit',
             }}
             onChange={(event, { value }) => setQuery(value)}
             placeholder="Search Products"
@@ -186,9 +190,14 @@ const InnerDashboard = ({
               alignItems: 'center',
               display: 'flex',
             }}
+            onClick={() => setConfigureModalIsOpen(true)}
           >
             Configure
           </Button>
+          <ConfigureModal
+            open={configureModalIsOpen}
+            handleClose={() => setConfigureModalIsOpen(false)}
+          />
         </div>
       </Form>
 
