@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, {
+  useState,
+  // useEffect,
+} from 'react';
 import {
   Container,
   Button,
@@ -42,6 +45,7 @@ const InnerDashboard = ({
   shop,
   token,
   stashProducts,
+  stashProductCount,
   ui,
 }) => {
   const [syncing, setSyncing] = useState(false);
@@ -71,15 +75,32 @@ const InnerDashboard = ({
     }
   }
 
+  const getMetafieldsByProductId = async (productId) => {
+    try {
+      const get = await fetch(`${API_URL}/api/shopify/products/${productId}/metafields`, {
+        headers: {
+          shop,
+          token,
+        },
+      });
+
+      const result = await get.json();
+
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const copyData = async (data) => {
     try {
-      const post = await fetch(`${API_URL}/api/es/products/sync`, {
+      const post = await fetch(`${API_URL}/api/es/products/bulk`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           shop,
         },
-        body: JSON.stringify(data.products),
+        body: JSON.stringify(data),
       });
 
       const result = await post.json();
@@ -93,12 +114,25 @@ const InnerDashboard = ({
   const handleSync = async () => {
     setSyncing(true);
 
-    const limit = 2;
+    let totalCount = 0;
+
+    const limit = 250;
     const totalPages = shopify.products.count / limit;
 
     let newUrl = null;
     for (let index = 0; index < totalPages; index++) {
       const page = await getProductsFromShopify(newUrl);
+
+      const extendedPageOfProducts = await Promise.all(page.data.products.map(async (product) => {
+        const metafields = await getMetafieldsByProductId(product.id)
+
+        return {
+          ...product,
+          metafields,
+        };
+      }))
+
+      totalCount += extendedPageOfProducts.length;
 
       if (page.meta) {
         newUrl = replace('<', '', page.meta);
@@ -106,10 +140,11 @@ const InnerDashboard = ({
       }
 
       // lets do a bulk insert with this new data
-      await copyData(page.data);
+      await copyData(extendedPageOfProducts);
     }
 
     setSyncing(false);
+    stashProductCount(totalCount);
   }
 
   const handleSearch = async () => {
@@ -341,12 +376,12 @@ const InnerDashboard = ({
 export default connect(
   ({ shopify, ui }) => ({ shopify, ui }),
   dispatch => ({
-    // stashProduct: payload => dispatch({
-    //   type: 'STASH_PRODUCT',
-    //   payload,
-    // }),
     stashProducts: payload => dispatch({
       type: 'STASH_PRODUCTS_ES',
+      payload,
+    }),
+    stashProductCount: payload => dispatch({
+      type: 'STASH_PRODUCTS_COUNT_ES',
       payload,
     }),
   }),
