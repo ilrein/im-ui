@@ -33,7 +33,7 @@ const HoverableRow = styled(Table.Row)`
 `;
 
 const DynamicHeaderCell = styled(Table.HeaderCell)`
-  display: ${props => props.visible ? 'table-cell' : 'none'};
+  display: ${props => props.visible === 'true' ? 'table-cell' : 'none'};
 `;
 
 const DynamicCell = styled(Table.Cell)`
@@ -128,7 +128,7 @@ const InnerDashboard = ({
 
         return {
           ...product,
-          metafields,
+          ...metafields,
         };
       }))
 
@@ -274,7 +274,7 @@ const InnerDashboard = ({
                       ui.properties.map((property) => (
                         <DynamicHeaderCell
                           key={property.key}
-                          visible={property.visible}
+                          visible={property.visible.toString()}
                         >
                           {property.key}
                         </DynamicHeaderCell>
