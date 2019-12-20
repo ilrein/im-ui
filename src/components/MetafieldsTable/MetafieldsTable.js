@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   Table,
+  Label,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
@@ -31,8 +32,11 @@ const MetafieldsTable = ({
                   product._source.metafields.map(metafield => (
                     <div
                       key={metafield.id}
+                      style={{ marginBottom: '0.25rem' }}
                     >
-                      {metafield.key}: {metafield.value}
+                      <Label>
+                        {metafield.key}: {metafield.value}
+                      </Label>
                     </div>
                   ))
                 }
