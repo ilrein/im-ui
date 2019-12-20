@@ -11,6 +11,7 @@ import {
   Loader,
   Header,
   Form,
+  Checkbox,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import replace from 'ramda/src/replace';
@@ -22,6 +23,7 @@ import TotalShopifyProducts from '../../components/TotalShopifyProducts';
 import TotalESProducts from '../../components/TotalESProducts';
 import ConfigureModal from '../../components/ConfigureModal';
 import ProductModal from '../../components/ProductModal';
+import MetafieldsTable from '../../components/MetafieldsTable';
 
 const HoverableRow = styled(Table.Row)`
   transition: all 0.25s ease-in-out;
@@ -56,6 +58,7 @@ const InnerDashboard = ({
   const [configureModalIsOpen, setConfigureModalIsOpen] = useState(false);
   const [productModalIsOpen, setProductModalIsOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [metafieldsView, setMetafieldsView] = useState(false);
 
   const getProductsFromShopify = async (page = null) => {
     try {
@@ -229,6 +232,13 @@ const InnerDashboard = ({
           >
             Configure
           </Button>
+
+          <Checkbox
+            slider
+            label="Metafields"
+            onChange={(event, { checked }) => setMetafieldsView(checked)}
+          />
+
           <ConfigureModal
             open={configureModalIsOpen}
             handleClose={() => setConfigureModalIsOpen(false)}
@@ -262,6 +272,7 @@ const InnerDashboard = ({
       {
         data.length > 0
         && !searching
+        && !metafieldsView
           ? (
             <>
               <Table
@@ -367,6 +378,14 @@ const InnerDashboard = ({
               </Table>
             </>
           )
+          : null
+      }
+
+      {
+        data.length > 0
+        && !searching
+        && metafieldsView
+          ? <MetafieldsTable />
           : null
       }
     </Container>
