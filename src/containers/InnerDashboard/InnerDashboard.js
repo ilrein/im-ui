@@ -1,6 +1,5 @@
 import React, {
   useState,
-  // useEffect,
 } from 'react';
 import {
   Container,
@@ -14,13 +13,11 @@ import {
   Checkbox,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import replace from 'ramda/src/replace';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 
 import { API_URL } from '../../constants';
-import TotalShopifyProducts from '../../components/TotalShopifyProducts';
-import TotalESProducts from '../../components/TotalESProducts';
+import SyncManager from '../../components/SyncManager';
 import ConfigureModal from '../../components/ConfigureModal';
 import ProductModal from '../../components/ProductModal';
 import MetafieldsTable from '../../components/MetafieldsTable';
@@ -43,14 +40,10 @@ const DynamicCell = styled(Table.Cell)`
 `;
 
 const InnerDashboard = ({
-  shopify,
   shop,
-  token,
   stashProducts,
-  stashProductCount,
   ui,
 }) => {
-  const [syncing, setSyncing] = useState(false);
   const [searching, setSearching] = useState(false);
   const [query, setQuery] = useState('');
   const [data, setData] = useState([]);
@@ -60,95 +53,6 @@ const InnerDashboard = ({
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [metafieldsView, setMetafieldsView] = useState(false);
 
-  const getProductsFromShopify = async (page = null) => {
-    try {
-      const get = await fetch(`${API_URL}/api/shopify/products`, {
-        headers: {
-          shop,
-          token,
-          ...(page) && { page },
-        },
-      });
-
-      const result = await get.json();
-
-      return result;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  const getMetafieldsByProductId = async (productId) => {
-    try {
-      const get = await fetch(`${API_URL}/api/shopify/products/${productId}/metafields`, {
-        headers: {
-          shop,
-          token,
-        },
-      });
-
-      const result = await get.json();
-
-      return result;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  const copyData = async (data) => {
-    try {
-      const post = await fetch(`${API_URL}/api/es/products/bulk`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          shop,
-        },
-        body: JSON.stringify(data),
-      });
-
-      const result = await post.json();
-
-      return result;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleSync = async () => {
-    setSyncing(true);
-
-    let totalCount = 0;
-
-    const limit = 250;
-    const totalPages = shopify.products.count / limit;
-
-    let newUrl = null;
-    for (let index = 0; index < totalPages; index++) {
-      const page = await getProductsFromShopify(newUrl);
-
-      const extendedPageOfProducts = await Promise.all(page.data.products.map(async (product) => {
-        const metafields = await getMetafieldsByProductId(product.id)
-
-        return {
-          ...product,
-          ...metafields,
-        };
-      }))
-
-      totalCount += extendedPageOfProducts.length;
-
-      if (page.meta) {
-        newUrl = replace('<', '', page.meta);
-        newUrl = replace('>', '', newUrl);
-      }
-
-      // lets do a bulk insert with this new data
-      await copyData(extendedPageOfProducts);
-    }
-
-    setSyncing(false);
-    stashProductCount(totalCount);
-  }
 
   const handleSearch = async () => {
     setHasSearchedOnce(true);
@@ -181,26 +85,7 @@ const InnerDashboard = ({
     <Container
       style={{ marginTop: '1rem' }}
     >
-      <Segment
-        style={{ display: 'flex', justifyContent: 'space-between' }}
-      >
-        <TotalShopifyProducts
-          token={token}
-          shop={shop}
-        />
-
-        <TotalESProducts
-          token={token}
-          shop={shop}
-        />
-
-        <Button
-          onClick={handleSync}
-          loading={syncing}
-        >
-          Sync Now
-        </Button>
-      </Segment>
+      <SyncManager />
 
       <Form>
         <Header>
