@@ -21,6 +21,7 @@ const SyncManager = ({
 }) => {
   const { token, shop } = session;
   const [syncing, setSyncing] = useState(false);
+  const [enablingWebhooks, setEnablingWebhooks] = useState(false);
 
   const getProductsFromShopify = async (page = null) => {
     try {
@@ -114,15 +115,49 @@ const SyncManager = ({
   }
 
   const enableWebhooks = async (checked) => {
-    setSyncing(true);
+    setEnablingWebhooks(true);
 
-    try {
-      console.log('configuring webhooks', checked);
-    } catch (error) {
-      
+    if (checked) {
+      try {
+        const post = await fetch(`${API_URL}/api/shopify/webhooks/enable`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            shop,
+            token,
+          },
+        })
+  
+        const result = await post.json();
+  
+        console.log(result);
+  
+        toast.success('Enabled webhooks!');
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        const remove = await fetch(`${API_URL}/api/shopify/webhooks/disable`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            shop,
+            token,
+          },
+        })
+  
+        const result = await remove.json();
+  
+        console.log(result);
+  
+        toast.warning('Disabled webhooks');
+      } catch (error) {
+        console.log(error);
+      }
     }
     
-    setSyncing(false);
+    setEnablingWebhooks(false);
   }
 
   return (
@@ -132,6 +167,7 @@ const SyncManager = ({
         justifyContent: 'space-between',
         alignItems: 'center',
       }}
+      loading={enablingWebhooks}
     >
       <TotalShopifyProducts
         token={token}
