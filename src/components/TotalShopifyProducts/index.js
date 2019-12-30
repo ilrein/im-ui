@@ -39,6 +39,7 @@ const TotalShopifyProducts = ({
     <Statistic
       label="Total Shopify Products"
       value={shopify.products.count}
+      style={{ margin: 0 }}
     />
   )
 };

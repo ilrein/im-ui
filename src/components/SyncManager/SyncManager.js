@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import {
   Button,
   Segment,
+  Checkbox,
 } from 'semantic-ui-react';
 import replace from 'ramda/src/replace';
 
@@ -15,7 +16,7 @@ import TotalESProducts from '../../components/TotalESProducts';
 const SyncManager = ({
   shopify,
   stashProductCount,
-  session
+  session,
 }) => {
   const { token, shop } = session;
   const [syncing, setSyncing] = useState(false);
@@ -110,9 +111,25 @@ const SyncManager = ({
     stashProductCount(totalCount);
   }
 
+  const enableWebhooks = async (checked) => {
+    setSyncing(true);
+
+    try {
+      console.log('configuring webhooks', checked);
+    } catch (error) {
+      
+    }
+    
+    setSyncing(false);
+  }
+
   return (
     <Segment
-      style={{ display: 'flex', justifyContent: 'space-between' }}
+      style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}
     >
       <TotalShopifyProducts
         token={token}
@@ -130,6 +147,12 @@ const SyncManager = ({
       >
         Sync Now
       </Button>
+
+      <Checkbox
+        slider
+        label="Webooks Enabked"
+        onChange={(event, { checked }) => enableWebhooks(checked)}
+      />
     </Segment>
   )
 }

@@ -88,7 +88,9 @@ const InnerDashboard = ({
       <SyncManager />
 
       <Form>
-        <Header>
+        <Header
+          style={{ margin: '2rem 0' }}
+        >
           Search Products
         </Header>
         <div
