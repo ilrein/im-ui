@@ -8,6 +8,7 @@ import {
   Checkbox,
 } from 'semantic-ui-react';
 import replace from 'ramda/src/replace';
+import { toast } from 'react-toastify';
 
 import { API_URL } from '../../constants';
 import TotalShopifyProducts from '../../components/TotalShopifyProducts';
@@ -109,6 +110,7 @@ const SyncManager = ({
 
     setSyncing(false);
     stashProductCount(totalCount);
+    toast.success('Synced all products!');
   }
 
   const enableWebhooks = async (checked) => {
@@ -150,7 +152,7 @@ const SyncManager = ({
 
       <Checkbox
         slider
-        label="Webooks Enabked"
+        label="Webhooks Enabled"
         onChange={(event, { checked }) => enableWebhooks(checked)}
       />
     </Segment>
