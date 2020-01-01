@@ -1,5 +1,6 @@
 import React, {
   useState,
+  useEffect,
 } from 'react';
 import { connect } from 'react-redux';
 import {
@@ -20,8 +21,10 @@ const SyncManager = ({
   session,
 }) => {
   const { token, shop } = session;
+
   const [syncing, setSyncing] = useState(false);
   const [enablingWebhooks, setEnablingWebhooks] = useState(false);
+  const [webhooksEnabled, setWebhooksEnabled] = useState(false);
 
   const getProductsFromShopify = async (page = null) => {
     try {
@@ -128,11 +131,10 @@ const SyncManager = ({
           },
         })
   
-        const result = await post.json();
-  
-        console.log(result);
+        await post.json();
   
         toast.success('Enabled webhooks!');
+        setWebhooksEnabled(true);
       } catch (error) {
         console.log(error);
       }
@@ -147,11 +149,10 @@ const SyncManager = ({
           },
         })
   
-        const result = await remove.json();
-  
-        console.log(result);
+        await remove.json();
   
         toast.warning('Disabled webhooks');
+        setWebhooksEnabled(false);
       } catch (error) {
         console.log(error);
       }
@@ -159,6 +160,34 @@ const SyncManager = ({
     
     setEnablingWebhooks(false);
   }
+
+  const checkIfHooksAreEnabledAlready = async () => {
+    setEnablingWebhooks(true);
+
+    try {
+      const get = await fetch(`${API_URL}/api/shopify/webhooks`, {
+        headers: {
+          'Content-Type': 'application/json',
+          shop,
+          token,
+        },
+      })
+
+      const result = await get.json();
+
+      if (result && result.webhooks && result.webhooks.length === 3) {
+        setWebhooksEnabled(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    
+    setEnablingWebhooks(false);
+  }
+
+  useEffect(() => {
+    checkIfHooksAreEnabledAlready();
+  }, [session]); // eslint-disable-line
 
   return (
     <Segment
@@ -190,6 +219,7 @@ const SyncManager = ({
         slider
         label="Webhooks Enabled"
         onChange={(event, { checked }) => enableWebhooks(checked)}
+        checked={webhooksEnabled}
       />
     </Segment>
   )
