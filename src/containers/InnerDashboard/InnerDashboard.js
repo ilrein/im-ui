@@ -147,7 +147,10 @@ const InnerDashboard = ({
       {
         searching
           ? (
-            <Segment style={{ height: '10rem' }}>
+            <Segment
+              style={{ height: '10rem' }}
+              className="fade-in"
+            >
               <Dimmer active inverted>
                 <Loader inverted content="Loading" />
               </Dimmer>
@@ -165,6 +168,7 @@ const InnerDashboard = ({
               <Table
                 celled
                 stackable
+                className="fade-in"
               >
                 <Table.Header>
                   <Table.Row>
@@ -254,7 +258,10 @@ const InnerDashboard = ({
         && hasSearchedOnce
           ? (
             <>
-              <Table celled>
+              <Table
+                celled
+                className="fade-in"
+              >
                 <Table.Body>
                   <Table.Row>
                     <Table.Cell>

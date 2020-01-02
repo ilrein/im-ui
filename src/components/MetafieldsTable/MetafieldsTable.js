@@ -11,7 +11,11 @@ const MetafieldsTable = ({
   es,
 }) => {
   return (
-    <Table celled striped>
+    <Table
+      celled
+      striped
+      className="fade-in"
+    >
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell colSpan='3'>
