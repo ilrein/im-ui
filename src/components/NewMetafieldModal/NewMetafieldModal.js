@@ -50,22 +50,26 @@ const NewMetafieldModal = ({
             fields.map(field => (
               <Form.Group
                 as={Segment}
+                key={Math.random()}
               >
                 <Form.Input
                   label="namespace"
-                  placeholder={field.placeholder}
+                  placeholder="global"
+                  value={field.placeholder}
                 />
                 <Form.Input
                   label="key"
-                  placeholder={field.key}
+                  placeholder="analytics"
+                  value={field.key}
                 />
                 <Form.Input
                   label="value"
-                  placeholder={field.value}
+                  placeholder="1z2d2f3z"
+                  value={field.value}
                 />
                 <Form.Input
                   label="type"
-                  placeholder={field.type}
+                  placeholder="String"
                 />
               </Form.Group>
             ))
