@@ -53,7 +53,6 @@ const InnerDashboard = ({
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [metafieldsView, setMetafieldsView] = useState(false);
 
-
   const handleSearch = async () => {
     setHasSearchedOnce(true);
     setSearching(true);

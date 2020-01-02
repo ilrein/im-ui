@@ -28,9 +28,10 @@ const UpdateMetafieldModal = ({
       />
       <Modal.Content>
         <h4>
-          {metafield.namespace}
+          {/* {metafield.namespace}
           {metafield.key}
-          {metafield.value}
+          {metafield.value} */}
+          content here
         </h4>
       </Modal.Content>
       <Modal.Actions>
