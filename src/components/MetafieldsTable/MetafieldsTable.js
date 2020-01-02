@@ -2,6 +2,8 @@ import React from 'react';
 import {
   Table,
   Label,
+  Button,
+  Icon
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
@@ -40,6 +42,14 @@ const MetafieldsTable = ({
                     </div>
                   ))
                 }
+              </Table.Cell>
+              <Table.Cell collapsing>
+                <Button
+                  icon
+                  color="teal"
+                >
+                  <Icon name="plus" />
+                </Button>
               </Table.Cell>
             </Table.Row>
           ))
