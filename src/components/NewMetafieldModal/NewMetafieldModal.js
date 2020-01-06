@@ -12,20 +12,21 @@ import {
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import fetch from 'isomorphic-fetch';
+import dropLast from 'ramda/src/dropLast';
+
+const field = {
+  namespace: '',
+  key: '',
+  value: '',
+  type: String,
+};
 
 const NewMetafieldModal = ({
   open,
   handleClose,
 }) => {
   const [creating, setCreating] = useState(false);
-  const [fields, setFields] = useState([
-    {
-      namespace: '',
-      key: '',
-      value: '',
-      type: String,
-    },
-  ]);
+  const [fields, setFields] = useState([field]);
 
   const create = async () => {
     try {
@@ -36,13 +37,17 @@ const NewMetafieldModal = ({
     }
   }
 
+  const increment = () => setFields([...fields, field])
+
+  const decrement = () => setFields(dropLast(1, fields))
+
   return (
     <Modal
       open={open}
       onClose={handleClose}
     >
       <Header
-        content="New Metafield"
+        content="New Metafield(s)"
       />
       <Modal.Content>
         <Form>
@@ -75,6 +80,22 @@ const NewMetafieldModal = ({
             ))
           }
         </Form>
+
+        <Button.Group>
+          <Button
+            disabled={fields.length === 1}
+            onClick={decrement}
+          >
+            Decrement
+          </Button>
+          <Button.Or />
+          <Button
+            positive
+            onClick={increment}
+          >
+            Increment
+          </Button>
+        </Button.Group>
       </Modal.Content>
       <Modal.Actions>
         <Button
