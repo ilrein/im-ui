@@ -1,5 +1,6 @@
 import React, {
   useState,
+  useRef,
 } from 'react';
 import {
   Modal,
@@ -14,6 +15,7 @@ import { connect } from 'react-redux';
 import fetch from 'isomorphic-fetch';
 import dropLast from 'ramda/src/dropLast';
 import isEmpty from 'ramda/src/isEmpty';
+import update from 'ramda/src/update';
 
 const field = {
   namespace: '',
@@ -58,6 +60,37 @@ const NewMetafieldModal = ({
 
   const decrement = () => setFields(dropLast(1, fields))
 
+  const namespaceInput = useRef(null);
+  const keyInput = useRef(null);
+  const valueInput = useRef(null);
+
+  const updateWithIndex = (index, property, newValue) => {
+    const item = fields[index];
+
+    const newObject = {
+      ...item,
+      [property]: newValue,
+    };
+
+    const changed = update(index, newObject, fields);
+
+    setFields(changed);
+
+    switch (property) {
+      case 'namespace':
+        namespaceInput.current.focus();   
+        break;
+      case 'key':
+        keyInput.current.focus();   
+        break;
+      case 'value':
+        valueInput.current.focus();   
+        break;
+      default:
+        break;
+    }
+  }
+
   return (
     <Modal
       open={open}
@@ -69,7 +102,7 @@ const NewMetafieldModal = ({
       <Modal.Content>
         <Form>
           {
-            fields.map(field => (
+            fields.map((field, index) => (
               <Form.Group
                 as={Segment}
                 key={Math.random()}
@@ -77,20 +110,24 @@ const NewMetafieldModal = ({
                 <Form.Input
                   label="namespace"
                   placeholder="global"
-                  onChange={(event, { value }) => field.global = value}
+                  onChange={(event, { value }) => updateWithIndex(index, 'namespace', value)}
+                  value={field.namespace}
                   required
+                  ref={namespaceInput}
                 />
                 <Form.Input
                   label="key"
                   placeholder="analytics"
-                  onChange={(event, { value }) => field.key = value}
+                  onChange={(event, { value }) => updateWithIndex(index, 'key', value)}
                   required
+                  ref={keyInput}
                 />
                 <Form.Input
                   label="value"
                   placeholder="1z2d2f3z"
-                  onChange={(event, { value }) => field.value = value}
+                  onChange={(event, { value }) => updateWithIndex(index, 'value', value)}
                   required
+                  ref={valueInput}
                 />
                 <Form.Input
                   label="type"
