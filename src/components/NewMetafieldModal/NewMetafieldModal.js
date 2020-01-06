@@ -29,12 +29,16 @@ const NewMetafieldModal = ({
   const [fields, setFields] = useState([field]);
 
   const create = async () => {
+    setCreating(true);
+
     try {
       // const post = await fetch()
       console.log('create');
     } catch (error) {
       console.log(error);
     }
+
+    setCreating(false);
   }
 
   const increment = () => setFields([...fields, field])
@@ -100,12 +104,14 @@ const NewMetafieldModal = ({
       <Modal.Actions>
         <Button
           onClick={handleClose}
+          disabled={creating}
         >
           Cancel
         </Button>
         <Button
           color="green"
           onClick={create}
+          loading={creating}
           inverted
         >
           <Icon name="checkmark" /> Create
