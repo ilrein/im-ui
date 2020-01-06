@@ -13,6 +13,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import fetch from 'isomorphic-fetch';
 import dropLast from 'ramda/src/dropLast';
+import isEmpty from 'ramda/src/isEmpty';
 
 const field = {
   namespace: '',
@@ -33,7 +34,19 @@ const NewMetafieldModal = ({
 
     try {
       // const post = await fetch()
-      console.log('create');
+      
+      // const check = fields.map(field => {
+      //   if (isEmpty(field.namespace)) return false;
+      //   if (isEmpty(field.key)) return false;
+      //   if (isEmpty(field.value)) return false;
+
+      //   return true;
+      // })
+
+      // console.log(check[0]);
+      // console.log(fields);
+
+      console.log(fields.some(element => isEmpty(element.namespace)))
     } catch (error) {
       console.log(error);
     }
@@ -64,17 +77,20 @@ const NewMetafieldModal = ({
                 <Form.Input
                   label="namespace"
                   placeholder="global"
-                  value={field.placeholder}
+                  onChange={(event, { value }) => field.global = value}
+                  required
                 />
                 <Form.Input
                   label="key"
                   placeholder="analytics"
-                  value={field.key}
+                  onChange={(event, { value }) => field.key = value}
+                  required
                 />
                 <Form.Input
                   label="value"
                   placeholder="1z2d2f3z"
-                  value={field.value}
+                  onChange={(event, { value }) => field.value = value}
+                  required
                 />
                 <Form.Input
                   label="type"
@@ -113,6 +129,11 @@ const NewMetafieldModal = ({
           onClick={create}
           loading={creating}
           inverted
+          disabled={
+            fields.some(element => isEmpty(element.namespace))
+            || fields.some(element => isEmpty(element.key))
+            || fields.some(element => isEmpty(element.value))
+          }
         >
           <Icon name="checkmark" /> Create
         </Button>
