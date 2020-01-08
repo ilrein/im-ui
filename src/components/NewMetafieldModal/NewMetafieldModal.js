@@ -13,6 +13,8 @@ import {
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import fetch from 'isomorphic-fetch';
+
+// ramda utils
 import dropLast from 'ramda/src/dropLast';
 import isEmpty from 'ramda/src/isEmpty';
 import update from 'ramda/src/update';
@@ -106,6 +108,7 @@ const NewMetafieldModal = ({
               <Form.Group
                 as={Segment}
                 key={Math.random()}
+                widths="equal"
               >
                 <Form.Input
                   label="namespace"
@@ -129,9 +132,23 @@ const NewMetafieldModal = ({
                   required
                   ref={valueInput}
                 />
-                <Form.Input
+                <Form.Dropdown
                   label="type"
-                  placeholder="String"
+                  fluid
+                  selection
+                  defaultValue="String"
+                  options={[
+                    {
+                      key: 'String',
+                      text: 'String',
+                      value: 'String',
+                    },
+                    {
+                      key: 'Number',
+                      text: 'Number',
+                      value: 'Number',
+                    },
+                  ]}
                 />
               </Form.Group>
             ))
