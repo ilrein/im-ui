@@ -1,6 +1,5 @@
 import React, {
   useState,
-  useRef,
 } from 'react';
 import {
   Modal,
@@ -19,39 +18,26 @@ import dropLast from 'ramda/src/dropLast';
 import isEmpty from 'ramda/src/isEmpty';
 import update from 'ramda/src/update';
 
-const field = {
+const field = () => ({
   id: Math.random(),
   namespace: '',
   key: '',
   value: '',
-  type: String,
-};
+  type: 'String',
+});
 
 const NewMetafieldModal = ({
   open,
   handleClose,
 }) => {
   const [creating, setCreating] = useState(false);
-  const [fields, setFields] = useState([field]);
+  const [fields, setFields] = useState([field()]);
 
   const create = async () => {
     setCreating(true);
 
     try {
       // const post = await fetch()
-      
-      // const check = fields.map(field => {
-      //   if (isEmpty(field.namespace)) return false;
-      //   if (isEmpty(field.key)) return false;
-      //   if (isEmpty(field.value)) return false;
-
-      //   return true;
-      // })
-
-      // console.log(check[0]);
-      // console.log(fields);
-
-      console.log(fields.some(element => isEmpty(element.namespace)))
     } catch (error) {
       console.log(error);
     }
@@ -59,13 +45,9 @@ const NewMetafieldModal = ({
     setCreating(false);
   }
 
-  const increment = () => setFields([...fields, field])
+  const increment = () => setFields([...fields, field()])
 
   const decrement = () => setFields(dropLast(1, fields))
-
-  const namespaceInput = useRef(null);
-  const keyInput = useRef(null);
-  const valueInput = useRef(null);
 
   const updateWithIndex = (index, property, newValue) => {
     const item = fields[index];
@@ -73,6 +55,20 @@ const NewMetafieldModal = ({
     const newObject = {
       ...item,
       [property]: newValue,
+    };
+
+    const changed = update(index, newObject, fields);
+
+    setFields(changed);
+  }
+
+  const setType = (index, newValue) => {
+    const item = fields[index];
+
+    const newObject = {
+      ...item,
+      value: '',
+      type: newValue,
     };
 
     const changed = update(index, newObject, fields);
@@ -109,18 +105,22 @@ const NewMetafieldModal = ({
                   placeholder="analytics"
                   onChange={(event, { value }) => updateWithIndex(index, 'key', value)}
                   required
+                  value={field.key}
                 />
                 <Form.Input
                   label="value"
-                  placeholder="1z2d2f3z"
+                  placeholder={field.type === 'String' ? '1z2d2f3z' : '12837213'}
                   onChange={(event, { value }) => updateWithIndex(index, 'value', value)}
                   required
+                  value={field.value}
+                  type={field.type === 'String' ? 'text' : '12837213'}
                 />
                 <Form.Dropdown
                   label="type"
                   fluid
                   selection
-                  defaultValue="String"
+                  defaultValue={field.type}
+                  onChange={(event, { value }) => setType(index, value)}
                   options={[
                     {
                       key: 'String',
