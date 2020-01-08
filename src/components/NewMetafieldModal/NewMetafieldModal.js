@@ -20,6 +20,7 @@ import isEmpty from 'ramda/src/isEmpty';
 import update from 'ramda/src/update';
 
 const field = {
+  id: Math.random(),
   namespace: '',
   key: '',
   value: '',
@@ -77,20 +78,6 @@ const NewMetafieldModal = ({
     const changed = update(index, newObject, fields);
 
     setFields(changed);
-
-    switch (property) {
-      case 'namespace':
-        namespaceInput.current.focus();   
-        break;
-      case 'key':
-        keyInput.current.focus();   
-        break;
-      case 'value':
-        valueInput.current.focus();   
-        break;
-      default:
-        break;
-    }
   }
 
   return (
@@ -107,7 +94,7 @@ const NewMetafieldModal = ({
             fields.map((field, index) => (
               <Form.Group
                 as={Segment}
-                key={Math.random()}
+                key={field.id}
                 widths="equal"
               >
                 <Form.Input
@@ -116,21 +103,18 @@ const NewMetafieldModal = ({
                   onChange={(event, { value }) => updateWithIndex(index, 'namespace', value)}
                   value={field.namespace}
                   required
-                  ref={namespaceInput}
                 />
                 <Form.Input
                   label="key"
                   placeholder="analytics"
                   onChange={(event, { value }) => updateWithIndex(index, 'key', value)}
                   required
-                  ref={keyInput}
                 />
                 <Form.Input
                   label="value"
                   placeholder="1z2d2f3z"
                   onChange={(event, { value }) => updateWithIndex(index, 'value', value)}
                   required
-                  ref={valueInput}
                 />
                 <Form.Dropdown
                   label="type"
