@@ -18,6 +18,8 @@ import dropLast from 'ramda/src/dropLast';
 import isEmpty from 'ramda/src/isEmpty';
 import update from 'ramda/src/update';
 
+import { API_URL } from '../../constants';
+
 const field = () => ({
   id: Math.random(),
   namespace: '',
@@ -37,7 +39,7 @@ const NewMetafieldModal = ({
     setCreating(true);
 
     try {
-      // const post = await fetch()
+      // const post = await fetch(`${API_URL}/`)
     } catch (error) {
       console.log(error);
     }
