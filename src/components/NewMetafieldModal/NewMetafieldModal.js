@@ -31,6 +31,8 @@ const field = () => ({
 const NewMetafieldModal = ({
   open,
   handleClose,
+  productId,
+  session,
 }) => {
   const [creating, setCreating] = useState(false);
   const [fields, setFields] = useState([field()]);
@@ -39,7 +41,21 @@ const NewMetafieldModal = ({
     setCreating(true);
 
     try {
-      // const post = await fetch(`${API_URL}/`)
+      // console.log(productId);
+      const { shop, token } = session;
+
+      const post = await fetch(`${API_URL}/shopify/products/${productId}/metafields`, {
+        method: 'POST',
+        headers: {
+          shop,
+          token,
+        },
+        body: JSON.stringify(fields)
+      });
+
+      const result = await post.json();
+
+      console.log(result);
     } catch (error) {
       console.log(error);
     }
@@ -183,7 +199,7 @@ const NewMetafieldModal = ({
 }
 
 export default connect(
-  // ({ ui }) => ({ ui }),
+  ({ session }) => ({ session }),
   // dispatch => ({
   //   changePropVisibility: (key, payload) => dispatch({
   //     type: 'CHANGE_PROP_VISIBILITY',

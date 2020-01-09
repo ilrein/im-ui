@@ -15,13 +15,22 @@ const MetafieldsTable = ({
 }) => {
   const [newModalIsOpen, setNewModalIsOpen] = useState(false);
   const [updateModalIsOpen, setUpdateModalIsOpen] = useState(false);
+  const [currentlySelectedProduct, setCurrentlySelectedProduct] = useState(null);
 
   return (
     <>
-      <NewMetafieldModal
-        open={newModalIsOpen}
-        handleClose={() => setNewModalIsOpen(false)}
-      />
+      {
+        currentlySelectedProduct
+        && currentlySelectedProduct._id
+          ? (
+            <NewMetafieldModal
+              open={newModalIsOpen}
+              handleClose={() => setNewModalIsOpen(false)}
+              productId={currentlySelectedProduct._id}
+            />
+          )
+          : null
+      }
       <UpdateMetafieldModal
         open={updateModalIsOpen}
         handleClose={() => setUpdateModalIsOpen(false)}
@@ -66,7 +75,10 @@ const MetafieldsTable = ({
                   <Button
                     icon
                     color="teal"
-                    onClick={() => setNewModalIsOpen(true)}
+                    onClick={() => {
+                      setCurrentlySelectedProduct(product);
+                      setNewModalIsOpen(true);
+                    }}
                   >
                     <Icon name="plus" />
                   </Button>
