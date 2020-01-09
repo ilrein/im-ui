@@ -44,9 +44,10 @@ const NewMetafieldModal = ({
       // console.log(productId);
       const { shop, token } = session;
 
-      const post = await fetch(`${API_URL}/shopify/products/${productId}/metafields`, {
+      const post = await fetch(`${API_URL}/api/shopify/products/${productId}/metafields`, {
         method: 'POST',
         headers: {
+          'Content-Type': 'application/json',
           shop,
           token,
         },
