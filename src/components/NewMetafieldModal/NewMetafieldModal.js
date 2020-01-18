@@ -12,6 +12,7 @@ import {
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import fetch from 'isomorphic-fetch';
+import { toast } from 'react-toastify';
 
 // ramda utils
 import dropLast from 'ramda/src/dropLast';
@@ -57,6 +58,8 @@ const NewMetafieldModal = ({
       const result = await post.json();
 
       console.log(result);
+      toast.success('Created successfully!');
+      handleClose();
     } catch (error) {
       console.log(error);
     }

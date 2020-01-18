@@ -129,7 +129,10 @@ const SyncManager = ({
             shop,
             token,
           },
-        })
+          body: JSON.stringify({
+            namespaces: ['global'],
+          }),
+        });
   
         await post.json();
   
