@@ -14,6 +14,7 @@ import { connect } from 'react-redux';
 import { API_URL } from '../constants';
 import Navbar from '../components/Navbar';
 import InnerDashboard from '../containers/InnerDashboard';
+import SocketConnection from '../containers/SocketConnection';
 
 const Dashboard = ({
   location,
@@ -83,7 +84,11 @@ const Dashboard = ({
         token
         && shop
         && indexExists
-          ? <InnerDashboard token={token} shop={shop} />
+          ? (
+            <SocketConnection>
+              <InnerDashboard token={token} shop={shop} />
+            </SocketConnection>
+          )
           : null
       }
     </Segment>
