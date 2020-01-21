@@ -13,9 +13,13 @@ const SocketConnection = ({
 
     const socket = io.connect(API_URL);
 
+    // Topics: [products/create, products/update, products/delete]
+
     socket.on('news', (data) => {
       console.log('data', data);
-    })
+    });
+
+    return () => socket.close();
   }, []);
 
   return (
