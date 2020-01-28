@@ -1,6 +1,7 @@
 function esReducer(state = {
   products: {
     count: 0,
+    list: [],
   }
 }, action) {
   switch (action.type) {

@@ -26,11 +26,16 @@ const SocketConnection = ({
     });
 
     socket.on('update', (data) => {
-      console.log('incoming data', data);
+      console.log('incoming update data', data);
+      /**
+       * when it updates,
+       * we should check our list in es/products/list
+       * if ID is matched, replace it
+       */
     })
 
     return () => socket.close();
-  }, [session]); // eslint-disable-line
+  }, [session]);
 
   return (
     <div>
