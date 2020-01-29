@@ -43,10 +43,11 @@ const InnerDashboard = ({
   shop,
   stashProducts,
   ui,
+  es,
 }) => {
   const [searching, setSearching] = useState(false);
   const [query, setQuery] = useState('');
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
   const [hasSearchedOnce, setHasSearchedOnce] = useState(false);
   const [configureModalIsOpen, setConfigureModalIsOpen] = useState(false);
   const [productModalIsOpen, setProductModalIsOpen] = useState(false);
@@ -66,7 +67,6 @@ const InnerDashboard = ({
 
       const searchResult = await get.json();
 
-      setData(searchResult);
       stashProducts(searchResult);
     } catch (error) {
       console.log(error);
@@ -159,7 +159,7 @@ const InnerDashboard = ({
       }
 
       {
-        data.length > 0
+        es.products.list.length > 0
         && !searching
         && !metafieldsView
           ? (
@@ -186,60 +186,60 @@ const InnerDashboard = ({
 
                 <Table.Body>
                   {
-                    data.map((product) => (
+                    es.products.list.map((product) => (
                       <HoverableRow
-                        key={product._id}
+                        key={product.id}
                         onClick={() => handleRowClick(product)}
                       >
                         <DynamicCell
                           visible={ui.properties.find(element => element.key === 'id' && element.visible === true)}
                         >
-                          {product._source.id}
+                          {product.id}
                         </DynamicCell>
                         <DynamicCell
                           visible={ui.properties.find(element => element.key === 'title' && element.visible === true)}
                         >
-                          {product._source.title}
+                          {product.title}
                         </DynamicCell>
                         <DynamicCell
                           visible={ui.properties.find(element => element.key === 'body_html' && element.visible === true)}
                         >
-                          {product._source.body_html}
+                          {product.body_html}
                         </DynamicCell>
                         <DynamicCell
                           visible={ui.properties.find(element => element.key === 'vendor' && element.visible === true)}
                         >
-                          {product._source.vendor}
+                          {product.vendor}
                         </DynamicCell>
                         <DynamicCell
                           visible={ui.properties.find(element => element.key === 'product_type' && element.visible === true)}
                         >
-                          {product._source.product_type}
+                          {product.product_type}
                         </DynamicCell>
                         <DynamicCell
                           visible={ui.properties.find(element => element.key === 'created_at' && element.visible === true)}
                         >
-                          {product._source.created_at}
+                          {product.created_at}
                         </DynamicCell>
                         <DynamicCell
                           visible={ui.properties.find(element => element.key === 'handle' && element.visible === true)}
                         >
-                          {product._source.handle}
+                          {product.handle}
                         </DynamicCell>
                         <DynamicCell
                           visible={ui.properties.find(element => element.key === 'updated_at' && element.visible === true)}
                         >
-                          {product._source.updated_at}
+                          {product.updated_at}
                         </DynamicCell>
                         <DynamicCell
                           visible={ui.properties.find(element => element.key === 'published_at' && element.visible === true)}
                         >
-                          {product._source.published_at}
+                          {product.published_at}
                         </DynamicCell>
                         <DynamicCell
                           visible={ui.properties.find(element => element.key === 'tags' && element.visible === true)}
                         >
-                          {product._source.tags}
+                          {product.tags}
                         </DynamicCell>
                       </HoverableRow>
                     ))
@@ -252,7 +252,7 @@ const InnerDashboard = ({
       }
 
       {
-        data.length === 0
+        es.products.list.length === 0
         && !searching
         && hasSearchedOnce
           ? (
@@ -275,7 +275,7 @@ const InnerDashboard = ({
       }
 
       {
-        data.length > 0
+        es.products.list.length > 0
         && !searching
         && metafieldsView
           ? <MetafieldsTable />
@@ -286,7 +286,7 @@ const InnerDashboard = ({
 }
 
 export default connect(
-  ({ shopify, ui }) => ({ shopify, ui }),
+  ({ shopify, ui, es }) => ({ shopify, ui, es }),
   dispatch => ({
     stashProducts: payload => dispatch({
       type: 'STASH_PRODUCTS_ES',
