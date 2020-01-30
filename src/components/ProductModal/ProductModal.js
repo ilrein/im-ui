@@ -24,11 +24,11 @@ const ProductModal = ({
       size="small"
     >
       <Header
-        content="Product"
+        content={product.id}
       />
       <Modal.Content>
         <h4>
-          {product._source.title}
+          {product.title}
         </h4>
       </Modal.Content>
       <Modal.Actions>

@@ -38,6 +38,10 @@ const defaultProperties = [
   {
     key: 'tags',
     visible: true,
+  },
+  {
+    key: 'metafields',
+    visible: true,
   }
 ];
 

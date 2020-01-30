@@ -10,7 +10,7 @@ import {
   Loader,
   Header,
   Form,
-  Checkbox,
+  Label,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
@@ -20,7 +20,6 @@ import { API_URL } from '../../constants';
 import SyncManager from '../../components/SyncManager';
 import ConfigureModal from '../../components/ConfigureModal';
 import ProductModal from '../../components/ProductModal';
-import MetafieldsTable from '../../components/MetafieldsTable';
 
 const HoverableRow = styled(Table.Row)`
   transition: all 0.25s ease-in-out;
@@ -47,12 +46,10 @@ const InnerDashboard = ({
 }) => {
   const [searching, setSearching] = useState(false);
   const [query, setQuery] = useState('');
-  // const [data, setData] = useState([]);
   const [hasSearchedOnce, setHasSearchedOnce] = useState(false);
   const [configureModalIsOpen, setConfigureModalIsOpen] = useState(false);
   const [productModalIsOpen, setProductModalIsOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [metafieldsView, setMetafieldsView] = useState(false);
 
   const handleSearch = async () => {
     setHasSearchedOnce(true);
@@ -119,12 +116,6 @@ const InnerDashboard = ({
             Configure
           </Button>
 
-          <Checkbox
-            slider
-            label="Metafields"
-            onChange={(event, { checked }) => setMetafieldsView(checked)}
-          />
-
           <ConfigureModal
             open={configureModalIsOpen}
             handleClose={() => setConfigureModalIsOpen(false)}
@@ -161,7 +152,6 @@ const InnerDashboard = ({
       {
         es.products.list.length > 0
         && !searching
-        && !metafieldsView
           ? (
             <>
               <Table
@@ -241,6 +231,22 @@ const InnerDashboard = ({
                         >
                           {product.tags}
                         </DynamicCell>
+                        <DynamicCell
+                          visible={ui.properties.find(element => element.key === 'metafields' && element.visible === true)}
+                        >
+                          {
+                            product.metafields.map(metafield => (
+                              <div
+                                key={metafield.id}
+                                style={{ marginBottom: '0.25rem' }}
+                              >
+                                <Label>
+                                  {metafield.key}: {metafield.value}
+                                </Label>
+                              </div>
+                            ))
+                          }
+                        </DynamicCell>
                       </HoverableRow>
                     ))
                   }
@@ -271,14 +277,6 @@ const InnerDashboard = ({
               </Table>
             </>
           )
-          : null
-      }
-
-      {
-        es.products.list.length > 0
-        && !searching
-        && metafieldsView
-          ? <MetafieldsTable />
           : null
       }
     </Container>
