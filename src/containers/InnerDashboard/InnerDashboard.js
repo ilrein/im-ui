@@ -11,6 +11,7 @@ import {
   Header,
   Form,
   Label,
+  Icon,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
@@ -20,6 +21,7 @@ import { API_URL } from '../../constants';
 import SyncManager from '../../components/SyncManager';
 import ConfigureModal from '../../components/ConfigureModal';
 import ProductModal from '../../components/ProductModal';
+import NewMetafieldModal from '../../components/NewMetafieldModal';
 
 const HoverableRow = styled(Table.Row)`
   transition: all 0.25s ease-in-out;
@@ -50,6 +52,9 @@ const InnerDashboard = ({
   const [configureModalIsOpen, setConfigureModalIsOpen] = useState(false);
   const [productModalIsOpen, setProductModalIsOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const [currentlySelectedProduct, setCurrentlySelectedProduct] = useState(null);
+  const [newModalIsOpen, setNewModalIsOpen] = useState(false);
 
   const handleSearch = async () => {
     setHasSearchedOnce(true);
@@ -82,6 +87,19 @@ const InnerDashboard = ({
       style={{ marginTop: '1rem' }}
     >
       <SyncManager />
+
+      {
+        currentlySelectedProduct
+        && currentlySelectedProduct.id
+          ? (
+            <NewMetafieldModal
+              open={newModalIsOpen}
+              handleClose={() => setNewModalIsOpen(false)}
+              productId={currentlySelectedProduct.id}
+            />
+          )
+          : null
+      }
 
       <Form>
         <Header
@@ -179,7 +197,7 @@ const InnerDashboard = ({
                     es.products.list.map((product) => (
                       <HoverableRow
                         key={product.id}
-                        onClick={() => handleRowClick(product)}
+                        // onClick={() => handleRowClick(product)}
                       >
                         <DynamicCell
                           visible={ui.properties.find(element => element.key === 'id' && element.visible === true)}
@@ -246,6 +264,18 @@ const InnerDashboard = ({
                               </div>
                             ))
                           }
+
+                          <Button
+                            icon
+                            color="teal"
+                            size="tiny"
+                            onClick={() => {
+                              setCurrentlySelectedProduct(product);
+                              setNewModalIsOpen(true);
+                            }}
+                          >
+                            <Icon name="plus" />
+                          </Button>
                         </DynamicCell>
                       </HoverableRow>
                     ))
