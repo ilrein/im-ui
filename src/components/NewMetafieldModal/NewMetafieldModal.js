@@ -55,11 +55,11 @@ const NewMetafieldModal = ({
         body: JSON.stringify(fields)
       });
 
-      const result = await post.json();
+      await post.json();
 
-      console.log(result);
-      toast.success('Created successfully!');
+      toast.success('Sending update...please wait a few minutes.');
       handleClose();
+      setFields([field()])
     } catch (error) {
       console.log(error);
     }
