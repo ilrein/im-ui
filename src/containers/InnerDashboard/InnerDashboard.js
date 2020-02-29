@@ -24,12 +24,12 @@ import ProductModal from '../../components/ProductModal';
 import NewMetafieldModal from '../../components/NewMetafieldModal';
 
 const HoverableRow = styled(Table.Row)`
-  transition: all 0.25s ease-in-out;
-  cursor: pointer;
+  // transition: all 0.25s ease-in-out;
+  // cursor: pointer;
 
-  &:hover {
-    background-color: #eee;
-  }
+  // &:hover {
+  //   background-color: #eee;
+  // }
 `;
 
 const DynamicHeaderCell = styled(Table.HeaderCell)`
