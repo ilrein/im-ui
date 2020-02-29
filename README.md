@@ -8,3 +8,5 @@ http://localhost:3000/shopify?shop=inventory-manager-1991.myshopify.com
     - make user enter namespaces to watch for?
 3. Product Images/Variants should be added to display, everything should be editable
 4. Search should support multiple keywords at once (seems to work out of the box)
+
+/*    /index.html   200
