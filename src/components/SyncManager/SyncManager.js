@@ -88,11 +88,13 @@ const SyncManager = ({
     const limit = 250;
     const totalPages = shopify.products.count / limit;
 
+    // console.log('totalPages', totalPages);
+
     let newUrl = null;
     for (let index = 0; index < totalPages; index++) {
       const page = await getProductsFromShopify(newUrl);
 
-      console.log('page', page);
+      // console.log('page', newUrl, index, page);
 
       const extendedPageOfProducts = await Promise.all(page.data.products.map(async (product) => {
         const metafields = await getMetafieldsByProductId(product.id)
@@ -106,8 +108,21 @@ const SyncManager = ({
       totalCount += extendedPageOfProducts.length;
 
       if (page.meta) {
-        newUrl = replace('<', '', page.meta);
-        newUrl = replace('>', '', newUrl);
+        // newUrl = replace('<', '', page.meta);
+        // newUrl = replace('>', '', newUrl);
+        const [previous, next] = page.meta.split(',');
+
+        // console.log(previous, next);
+
+        if (next) {
+          // console.log(next);
+          newUrl = replace('<', '', next);
+          newUrl = replace('>', '', newUrl);
+        } else {
+          newUrl = replace('<', '', previous);
+          newUrl = replace('>', '', newUrl);
+          // console.log('no next', newUrl);
+        }
       }
 
       // lets do a bulk insert with this new data
@@ -117,6 +132,55 @@ const SyncManager = ({
     setSyncing(false);
     stashProductCount(totalCount);
     toast.success('Synced all products!');
+  }
+
+  const dryRunSync = async () => {
+    setSyncing(true);
+
+    // let totalCount = 0; 
+
+    const limit = 2;
+    const totalPages = shopify.products.count / limit;
+
+    console.log('totalPages', totalPages);
+
+    let newUrl = null;
+    for (let index = 0; index < totalPages; index++) {
+      const page = await getProductsFromShopify(newUrl);
+
+      // console.log('page', index, page);
+
+      // const extendedPageOfProducts = await Promise.all(page.data.products.map(async (product) => {
+      //   const metafields = await getMetafieldsByProductId(product.id)
+
+      //   return {
+      //     ...product,
+      //     ...metafields,
+      //   };
+      // }))
+
+      // totalCount += extendedPageOfProducts.length;
+
+      if (page.meta) {
+        const [previous, next] = page.meta.split(',');
+
+        if (next) {
+          newUrl = replace('<', '', next);
+          newUrl = replace('>', '', newUrl);
+        } else {
+          newUrl = replace('<', '', previous);
+          newUrl = replace('>', '', newUrl);
+        }
+        
+        console.log(newUrl);
+      }
+
+      // lets do a bulk insert with this new data
+      // await copyData(extendedPageOfProducts);
+    }
+
+    setSyncing(false);
+    // toast.success('Dry run done.');
   }
 
   const enableWebhooks = async (checked) => {
@@ -219,6 +283,14 @@ const SyncManager = ({
       >
         Sync Now
       </Button>
+
+      {/* <Button
+        onClick={dryRunSync}
+        loading={syncing}
+        color="pink"
+      >
+        Dry run Sync
+      </Button> */}
 
       <Checkbox
         slider
