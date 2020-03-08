@@ -92,6 +92,8 @@ const SyncManager = ({
     for (let index = 0; index < totalPages; index++) {
       const page = await getProductsFromShopify(newUrl);
 
+      console.log('page', page);
+
       const extendedPageOfProducts = await Promise.all(page.data.products.map(async (product) => {
         const metafields = await getMetafieldsByProductId(product.id)
 
