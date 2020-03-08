@@ -320,9 +320,5 @@ export default connect(
       type: 'STASH_PRODUCTS_ES',
       payload,
     }),
-    stashProductCount: payload => dispatch({
-      type: 'STASH_PRODUCTS_COUNT_ES',
-      payload,
-    }),
   }),
 )(withRouter(InnerDashboard));

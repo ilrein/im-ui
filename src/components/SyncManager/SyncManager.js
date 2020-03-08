@@ -133,56 +133,7 @@ const SyncManager = ({
     stashProductCount(totalCount);
     toast.success('Synced all products!');
   }
-
-  const dryRunSync = async () => {
-    setSyncing(true);
-
-    // let totalCount = 0; 
-
-    const limit = 2;
-    const totalPages = shopify.products.count / limit;
-
-    console.log('totalPages', totalPages);
-
-    let newUrl = null;
-    for (let index = 0; index < totalPages; index++) {
-      const page = await getProductsFromShopify(newUrl);
-
-      // console.log('page', index, page);
-
-      // const extendedPageOfProducts = await Promise.all(page.data.products.map(async (product) => {
-      //   const metafields = await getMetafieldsByProductId(product.id)
-
-      //   return {
-      //     ...product,
-      //     ...metafields,
-      //   };
-      // }))
-
-      // totalCount += extendedPageOfProducts.length;
-
-      if (page.meta) {
-        const [previous, next] = page.meta.split(',');
-
-        if (next) {
-          newUrl = replace('<', '', next);
-          newUrl = replace('>', '', newUrl);
-        } else {
-          newUrl = replace('<', '', previous);
-          newUrl = replace('>', '', newUrl);
-        }
-        
-        console.log(newUrl);
-      }
-
-      // lets do a bulk insert with this new data
-      // await copyData(extendedPageOfProducts);
-    }
-
-    setSyncing(false);
-    // toast.success('Dry run done.');
-  }
-
+  
   const enableWebhooks = async (checked) => {
     setEnablingWebhooks(true);
 
