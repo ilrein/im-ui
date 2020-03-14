@@ -12,7 +12,8 @@ import { withRouter } from 'react-router-dom';
 import { API_URL } from '../constants';
 
 const Home = ({ location }) => {
-  const [value, setValue] = useState('inventory-manager-1991.myshopify.com');
+  // inventory-manager-1991.myshopify.com
+  const [value, setValue] = useState('movie-posters-shop.myshopify.com');
 
   const submit = async () => {
     try {

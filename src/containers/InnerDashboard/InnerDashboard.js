@@ -69,6 +69,9 @@ const InnerDashboard = ({
 
       const searchResult = await get.json();
 
+      // console.log(searchResult);
+      // return;
+
       stashProducts(searchResult);
     } catch (error) {
       console.log(error);
@@ -77,10 +80,10 @@ const InnerDashboard = ({
     setSearching(false);
   }
 
-  const handleRowClick = async (product) => {
-    setSelectedProduct(product);
-    setProductModalIsOpen(true);
-  }
+  // const handleRowClick = async (product) => {
+  //   setSelectedProduct(product);
+  //   setProductModalIsOpen(true);
+  // }
 
   return (
     <Container
@@ -253,7 +256,8 @@ const InnerDashboard = ({
                           visible={ui.properties.find(element => element.key === 'metafields' && element.visible === true)}
                         >
                           {
-                            product.metafields.map(metafield => (
+                            product.metafields
+                            && product.metafields.map(metafield => (
                               <div
                                 key={metafield.id}
                                 style={{ marginBottom: '0.25rem' }}

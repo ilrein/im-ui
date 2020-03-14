@@ -26,7 +26,7 @@ const Shopify = ({ location }) => {
 
       const result = await get.json();
 
-      console.log(result);
+      console.log('shopify/onMount', result);
 
       window.location.href = result;
     } catch (error) {
