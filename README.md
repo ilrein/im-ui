@@ -10,3 +10,5 @@ http://localhost:3000/shopify?shop=inventory-manager-1991.myshopify.com
 4. Search should support multiple keywords at once (seems to work out of the box)
 
 /*    /index.html   200
+
+http://im-ui-20200229161908-hostingbucket-dev.s3-website.us-east-2.amazonaws.com/
