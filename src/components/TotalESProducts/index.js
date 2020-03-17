@@ -27,7 +27,7 @@ const TotalESProducts = ({ token, shop, es, stashProductCount }) => {
 
   useEffect(() => {
     getProductsCount(token, shop);
-  }, []); // eslint-disable-line
+  }, [token, shop]); // eslint-disable-line
 
   return (
     <Statistic
