@@ -51,7 +51,7 @@ const InnerDashboard = ({
   const [hasSearchedOnce, setHasSearchedOnce] = useState(false);
   const [configureModalIsOpen, setConfigureModalIsOpen] = useState(false);
   const [productModalIsOpen, setProductModalIsOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedProduct] = useState(null);
 
   const [currentlySelectedProduct, setCurrentlySelectedProduct] = useState(null);
   const [newModalIsOpen, setNewModalIsOpen] = useState(false);
@@ -79,11 +79,6 @@ const InnerDashboard = ({
 
     setSearching(false);
   }
-
-  // const handleRowClick = async (product) => {
-  //   setSelectedProduct(product);
-  //   setProductModalIsOpen(true);
-  // }
 
   return (
     <Container

@@ -29,6 +29,8 @@ const Home = ({ location }) => {
 
       const result = await get.json();
 
+      console.log('redirecting...', result);
+
       window.location.href = result;
     } catch (error) {
       console.log(error);

@@ -48,7 +48,14 @@ const Dashboard = ({
     setLoading(false);
   }
 
-  const checkIfShopIndexExists = async () => {
+  //
+  // This is GET
+  // but it will perform a DB insertion
+  // if the shop is not found
+  //
+  const checkIfShopIndexExistsAndCreateIfNoneFound = async () => {
+    if (shop === null) return;
+    
     setLoading(true);
 
     try {
@@ -57,10 +64,12 @@ const Dashboard = ({
           shop,
         },
       })
+
       const result = await get.json();
 
       setIndexExists(result);
     } catch (error) {
+      console.log('index check error', error);
       // no index exists
     }
 
@@ -69,8 +78,11 @@ const Dashboard = ({
 
   useEffect(() => {
     getPermanentToken();
-    checkIfShopIndexExists()
   }, []); // eslint-disable-line
+
+  useEffect(() => {
+    checkIfShopIndexExistsAndCreateIfNoneFound()
+  }, [shop]); // eslint-disable-line
 
   return (
     <Segment
