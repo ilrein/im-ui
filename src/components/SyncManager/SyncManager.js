@@ -81,6 +81,17 @@ const SyncManager = ({
   };
   
   const handleSync = async () => {
+    //
+    // time to rewrite this to be a purely backend function
+    //
+    // it should:
+    // 1. Send the request to being operation
+    // 2. the backend should perform updates in increments of 250
+    // 3. the ui should update every 250 products as well
+    // 4. searching may be disabled during this time
+    // 5. running sync if the products are at an equal count should do nothing
+    // 6. running sync when some products are imported should cleverly only sync non-imported ones
+    //
     setSyncing(true);
 
     let totalCount = 0;
@@ -88,13 +99,9 @@ const SyncManager = ({
     const limit = 250;
     const totalPages = shopify.products.count / limit;
 
-    // console.log('totalPages', totalPages);
-
     let newUrl = null;
     for (let index = 0; index < totalPages; index++) {
       const page = await getProductsFromShopify(newUrl);
-
-      // console.log('page', newUrl, index, page);
 
       const extendedPageOfProducts = await Promise.all(page.data.products.map(async (product) => {
         const metafields = await getMetafieldsByProductId(product.id)
@@ -108,20 +115,14 @@ const SyncManager = ({
       totalCount += extendedPageOfProducts.length;
 
       if (page.meta) {
-        // newUrl = replace('<', '', page.meta);
-        // newUrl = replace('>', '', newUrl);
         const [previous, next] = page.meta.split(',');
 
-        // console.log(previous, next);
-
         if (next) {
-          // console.log(next);
           newUrl = replace('<', '', next);
           newUrl = replace('>', '', newUrl);
         } else {
           newUrl = replace('<', '', previous);
           newUrl = replace('>', '', newUrl);
-          // console.log('no next', newUrl);
         }
       }
 
