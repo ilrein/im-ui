@@ -15,6 +15,7 @@ const SocketConnection = ({
   session,
   es,
   updateESList,
+  stashESProductCount,
 }) => {
   useEffect(() => {
     const { shop } = session;
@@ -42,7 +43,8 @@ const SocketConnection = ({
     });
 
     socket.on('syncProgressUpdate', (num) => {
-      console.log('syncProgressUpdate', num);
+      // console.log('syncProgressUpdate', num);
+      stashESProductCount(num);
     });
 
     return () => socket.close();
@@ -61,6 +63,10 @@ export default connect(
     updateESList: (payload) => dispatch({
       type: 'STASH_PRODUCTS_ES',
       payload,
-    })
+    }),
+    stashESProductCount: payload => dispatch({
+      type: 'STASH_PRODUCTS_COUNT_ES',
+      payload,
+    }),
   }),
 )(SocketConnection);
