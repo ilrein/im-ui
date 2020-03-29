@@ -41,6 +41,10 @@ const SocketConnection = ({
       toast.success('Successfully updated', data.title);
     });
 
+    socket.on('syncProgressUpdate', (num) => {
+      console.log('syncProgressUpdate', num);
+    });
+
     return () => socket.close();
   }, [session, es]); // eslint-disable-line
 
