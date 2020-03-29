@@ -19,9 +19,9 @@ const Home = ({ location }) => {
   const [value, setValue] = useState('inventory-manager-1991.myshopify.com');
   const [loading, setLoading] = useState(true);
 
-  const submit = async () => {
+  const submit = async (SHOP = value) => {
     try {
-      const get = await fetch(`${API_URL}/shopify?shop=${value}`, {
+      const get = await fetch(`${API_URL}/shopify?shop=${SHOP}`, {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -45,7 +45,8 @@ const Home = ({ location }) => {
       && urlParams.get('timestamp')
     ) {
       setValue(urlParams.get('shop'));
-      submit();
+      // console.log(urlParams.get('shop'))
+      submit(urlParams.get('shop'));
     } else {
       setLoading(false);
     }
