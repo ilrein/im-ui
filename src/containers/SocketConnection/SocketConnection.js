@@ -20,17 +20,9 @@ const SocketConnection = ({
     const { shop } = session;
     const { products } = es;
 
-    // console.log(products.list);
-    
-    // console.log('SocketConnection mounted, trying to join room', shop);
-
     const socket = io.connect(API_URL);
 
-    // Topics: [products/create, products/update, products/delete]
-
     socket.on('connect', () => {
-      // console.log('connected...', shop);
-
       socket.emit('room', shop);
     });
 

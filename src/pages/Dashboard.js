@@ -85,25 +85,25 @@ const Dashboard = ({
   }, [shop]); // eslint-disable-line
 
   return (
-    <Segment
-      basic
-      loading={loading}
-      style={{ padding: 0 }}
-    >
-      <Navbar />
-      
-      {
-        token
-        && shop
-        && indexExists
-          ? (
-            <SocketConnection>
+    <SocketConnection>
+      <Segment
+        basic
+        loading={loading}
+        style={{ padding: 0 }}
+      >
+        <Navbar />
+        
+        {
+          token
+          && shop
+          && indexExists
+            ? (
               <InnerDashboard token={token} shop={shop} />
-            </SocketConnection>
-          )
-          : null
-      }
-    </Segment>
+            )
+            : null
+        }
+      </Segment>
+    </SocketConnection>
   )
 }
 

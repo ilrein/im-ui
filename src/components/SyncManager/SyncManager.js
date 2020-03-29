@@ -85,54 +85,77 @@ const SyncManager = ({
     // time to rewrite this to be a purely backend function
     //
     // it should:
-    // 1. Send the request to being operation
+    // 1. Send the request to begin operation
     // 2. the backend should perform updates in increments of 250
     // 3. the ui should update every 250 products as well
     // 4. searching may be disabled during this time
     // 5. running sync if the products are at an equal count should do nothing
     // 6. running sync when some products are imported should cleverly only sync non-imported ones
     //
-    setSyncing(true);
 
-    let totalCount = 0;
+    console.log('initiating sync...', shopify.products.count);
 
-    const limit = 250;
-    const totalPages = shopify.products.count / limit;
+    try {
+      setSyncing(true);
 
-    let newUrl = null;
-    for (let index = 0; index < totalPages; index++) {
-      const page = await getProductsFromShopify(newUrl);
-
-      const extendedPageOfProducts = await Promise.all(page.data.products.map(async (product) => {
-        const metafields = await getMetafieldsByProductId(product.id)
-
-        return {
-          ...product,
-          ...metafields,
-        };
-      }))
-
-      totalCount += extendedPageOfProducts.length;
-
-      if (page.meta) {
-        const [previous, next] = page.meta.split(',');
-
-        if (next) {
-          newUrl = replace('<', '', next);
-          newUrl = replace('>', '', newUrl);
-        } else {
-          newUrl = replace('<', '', previous);
-          newUrl = replace('>', '', newUrl);
-        }
-      }
-
-      // lets do a bulk insert with this new data
-      await copyData(extendedPageOfProducts);
+      await fetch(`${API_URL}/api/es/products/sync`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          shop,
+          token,
+        },
+        body: JSON.stringify({
+          count: shopify.products.count,
+        }),
+      });
+    } catch (error) {
+      console.log(error);
     }
 
     setSyncing(false);
-    stashProductCount(totalCount);
-    toast.success('Synced all products!');
+    
+    // setSyncing(true);
+
+    // let totalCount = 0;
+
+    // const limit = 250;
+    // const totalPages = shopify.products.count / limit;
+
+    // let newUrl = null;
+    // for (let index = 0; index < totalPages; index++) {
+    //   const page = await getProductsFromShopify(newUrl);
+
+    //   const extendedPageOfProducts = await Promise.all(page.data.products.map(async (product) => {
+    //     const metafields = await getMetafieldsByProductId(product.id)
+
+    //     return {
+    //       ...product,
+    //       ...metafields,
+    //     };
+    //   }))
+
+    //   totalCount += extendedPageOfProducts.length;
+
+    //   if (page.meta) {
+    //     const [previous, next] = page.meta.split(',');
+
+    //     if (next) {
+    //       newUrl = replace('<', '', next);
+    //       newUrl = replace('>', '', newUrl);
+    //     } else {
+    //       newUrl = replace('<', '', previous);
+    //       newUrl = replace('>', '', newUrl);
+    //     }
+    //   }
+
+    //   // lets do a bulk insert with this new data
+    //   await copyData(extendedPageOfProducts);
+    // }
+
+    // setSyncing(false);
+    // stashProductCount(totalCount);
+    // toast.success('Synced all products!');
   }
   
   const enableWebhooks = async (checked) => {
@@ -235,14 +258,6 @@ const SyncManager = ({
       >
         Sync Now
       </Button>
-
-      {/* <Button
-        onClick={dryRunSync}
-        loading={syncing}
-        color="pink"
-      >
-        Dry run Sync
-      </Button> */}
 
       <Checkbox
         slider
