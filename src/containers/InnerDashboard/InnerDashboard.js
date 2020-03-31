@@ -245,7 +245,19 @@ const InnerDashboard = ({
                         <DynamicCell
                           visible={ui.properties.find(element => element.key === 'tags' && element.visible === true)}
                         >
-                          {product.tags}
+                          {
+                            product.tags
+                            && product.tags.split(', ').map(tag => (
+                              <div
+                                key={tag}
+                                style={{ marginBottom: '0.25rem' }}
+                              >
+                                <Label>
+                                  {tag}
+                                </Label>
+                              </div>
+                            ))
+                          }
                         </DynamicCell>
                         <DynamicCell
                           visible={ui.properties.find(element => element.key === 'metafields' && element.visible === true)}
