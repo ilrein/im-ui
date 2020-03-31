@@ -16,10 +16,11 @@ import { API_URL } from '../constants';
 const Home = ({ location }) => {
   // inventory-manager-1991.myshopify.com
   // movie-posters-shop.myshopify.com
-  const [value, setValue] = useState('inventory-manager-1991.myshopify.com');
+  const [value, setValue] = useState('');
   const [loading, setLoading] = useState(true);
 
-  const submit = async (SHOP = value) => {
+  const submit = async (SHOP) => {
+    // console.log('submitting', SHOP);
     try {
       const get = await fetch(`${API_URL}/shopify?shop=${SHOP}`, {
         headers: {
@@ -71,13 +72,14 @@ const Home = ({ location }) => {
           : (
             <Form>
               <Form.Input
-                placeholder="Shop name"
+                label="Shop Name"
+                placeholder="inventory-manager-1991.myshopify.com"
                 onChange={(event, { value }) => setValue(value)}
                 value={value}
               />
 
               <Form.Button
-                onClick={submit}
+                onClick={() => submit(value)}
               >
                 Install App
               </Form.Button>
