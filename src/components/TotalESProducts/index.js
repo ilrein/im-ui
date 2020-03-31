@@ -19,7 +19,7 @@ const TotalESProducts = ({ token, shop, es, stashProductCount }) => {
   
       const result = await get.json();
   
-      stashProductCount(result.count);
+      stashProductCount(Number(result.count));
     } catch (error) {
       return error;
     }

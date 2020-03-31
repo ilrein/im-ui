@@ -43,7 +43,6 @@ const SocketConnection = ({
     });
 
     socket.on('syncProgressUpdate', (num) => {
-      // console.log('syncProgressUpdate', num);
       stashESProductCount(num);
     });
 
