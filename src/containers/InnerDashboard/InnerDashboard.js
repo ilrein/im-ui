@@ -1,5 +1,6 @@
 import React, {
   useState,
+  Fragment,
 } from 'react';
 import {
   Container,
@@ -173,6 +174,7 @@ const InnerDashboard = ({
               <Table
                 celled
                 stackable
+                structured
                 className="fade-in"
               >
                 <Table.Header>
@@ -182,6 +184,7 @@ const InnerDashboard = ({
                         <DynamicHeaderCell
                           key={property.key}
                           visible={property.visible.toString()}
+                          rowSpan="2"
                         >
                           {property.key}
                         </DynamicHeaderCell>
@@ -193,102 +196,134 @@ const InnerDashboard = ({
                 <Table.Body>
                   {
                     es.products.list.map((product) => (
-                      <HoverableRow
-                        key={product.id}
-                        // onClick={() => handleRowClick(product)}
-                      >
-                        <DynamicCell
-                          visible={ui.properties.find(element => element.key === 'id' && element.visible === true)}
-                        >
-                          {product.id}
-                        </DynamicCell>
-                        <DynamicCell
-                          visible={ui.properties.find(element => element.key === 'title' && element.visible === true)}
-                        >
-                          {product.title}
-                        </DynamicCell>
-                        <DynamicCell
-                          visible={ui.properties.find(element => element.key === 'body_html' && element.visible === true)}
-                        >
-                          {product.body_html}
-                        </DynamicCell>
-                        <DynamicCell
-                          visible={ui.properties.find(element => element.key === 'vendor' && element.visible === true)}
-                        >
-                          {product.vendor}
-                        </DynamicCell>
-                        <DynamicCell
-                          visible={ui.properties.find(element => element.key === 'product_type' && element.visible === true)}
-                        >
-                          {product.product_type}
-                        </DynamicCell>
-                        <DynamicCell
-                          visible={ui.properties.find(element => element.key === 'created_at' && element.visible === true)}
-                        >
-                          {product.created_at}
-                        </DynamicCell>
-                        <DynamicCell
-                          visible={ui.properties.find(element => element.key === 'handle' && element.visible === true)}
-                        >
-                          {product.handle}
-                        </DynamicCell>
-                        <DynamicCell
-                          visible={ui.properties.find(element => element.key === 'updated_at' && element.visible === true)}
-                        >
-                          {product.updated_at}
-                        </DynamicCell>
-                        <DynamicCell
-                          visible={ui.properties.find(element => element.key === 'published_at' && element.visible === true)}
-                        >
-                          {product.published_at}
-                        </DynamicCell>
-                        <DynamicCell
-                          visible={ui.properties.find(element => element.key === 'tags' && element.visible === true)}
-                        >
-                          {
-                            product.tags
-                            && product.tags.split(', ').map(tag => (
-                              <div
-                                key={tag}
-                                style={{ marginBottom: '0.25rem' }}
-                              >
-                                <Label>
-                                  {tag}
-                                </Label>
-                              </div>
-                            ))
-                          }
-                        </DynamicCell>
-                        <DynamicCell
-                          visible={ui.properties.find(element => element.key === 'metafields' && element.visible === true)}
-                        >
-                          {
-                            product.metafields
-                            && product.metafields.map(metafield => (
-                              <div
-                                key={metafield.id}
-                                style={{ marginBottom: '0.25rem' }}
-                              >
-                                <Label>
-                                  {metafield.key}: {metafield.value}
-                                </Label>
-                              </div>
-                            ))
-                          }
-
-                          <Button
-                            icon
-                            color="teal"
-                            size="tiny"
-                            onClick={() => {
-                              setCurrentlySelectedProduct(product);
-                              setNewModalIsOpen(true);
-                            }}
+                      <Fragment key={product.id}>
+                        <HoverableRow>
+                          <DynamicCell
+                            visible={ui.properties.find(element => element.key === 'id' && element.visible === true)}
                           >
-                            <Icon name="plus" />
-                          </Button>
-                        </DynamicCell>
-                      </HoverableRow>
+                            {product.id}
+                          </DynamicCell>
+                          <DynamicCell
+                            visible={ui.properties.find(element => element.key === 'title' && element.visible === true)}
+                          >
+                            {product.title}
+                          </DynamicCell>
+                          <DynamicCell
+                            visible={ui.properties.find(element => element.key === 'body_html' && element.visible === true)}
+                          >
+                            {product.body_html}
+                          </DynamicCell>
+                          <DynamicCell
+                            visible={ui.properties.find(element => element.key === 'vendor' && element.visible === true)}
+                          >
+                            {product.vendor}
+                          </DynamicCell>
+                          <DynamicCell
+                            visible={ui.properties.find(element => element.key === 'product_type' && element.visible === true)}
+                          >
+                            {product.product_type}
+                          </DynamicCell>
+                          <DynamicCell
+                            visible={ui.properties.find(element => element.key === 'created_at' && element.visible === true)}
+                          >
+                            {product.created_at}
+                          </DynamicCell>
+                          <DynamicCell
+                            visible={ui.properties.find(element => element.key === 'handle' && element.visible === true)}
+                          >
+                            {product.handle}
+                          </DynamicCell>
+                          <DynamicCell
+                            visible={ui.properties.find(element => element.key === 'updated_at' && element.visible === true)}
+                          >
+                            {product.updated_at}
+                          </DynamicCell>
+                          <DynamicCell
+                            visible={ui.properties.find(element => element.key === 'published_at' && element.visible === true)}
+                          >
+                            {product.published_at}
+                          </DynamicCell>
+                          <DynamicCell
+                            visible={ui.properties.find(element => element.key === 'tags' && element.visible === true)}
+                          >
+                            {
+                              product.tags
+                              && product.tags.split(', ').map(tag => (
+                                <div
+                                  key={tag}
+                                  style={{ marginBottom: '0.25rem' }}
+                                >
+                                  <Label>
+                                    {tag}
+                                  </Label>
+                                </div>
+                              ))
+                            }
+                          </DynamicCell>
+                          <DynamicCell
+                            visible={ui.properties.find(element => element.key === 'metafields' && element.visible === true)}
+                          >
+                            {
+                              product.metafields
+                              && product.metafields.map(metafield => (
+                                <div
+                                  key={metafield.id}
+                                  style={{ marginBottom: '0.25rem' }}
+                                >
+                                  <Label>
+                                    {metafield.key}: {metafield.value}
+                                  </Label>
+                                </div>
+                              ))
+                            }
+
+                            <Button
+                              icon
+                              color="teal"
+                              size="tiny"
+                              onClick={() => {
+                                setCurrentlySelectedProduct(product);
+                                setNewModalIsOpen(true);
+                              }}
+                            >
+                              <Icon name="plus" />
+                            </Button>
+                          </DynamicCell>
+                        </HoverableRow>
+                      
+                        <HoverableRow
+                          positive
+                        >
+                          {
+                            product.variants.map(variant => (
+                              <Fragment
+                                key={variant.id}
+                              >
+                                <DynamicCell
+                                  visible
+                                >
+                                  {variant.id}
+                                </DynamicCell>
+                                <DynamicCell
+                                  visible
+                                >
+                                  {variant.title}
+                                </DynamicCell>
+                                <DynamicCell
+                                  visible
+                                >
+                                  {variant.price}
+                                </DynamicCell>
+                                <DynamicCell
+                                  visible
+                                >
+                                  {variant.inventory_quantity}
+                                </DynamicCell>
+                              </Fragment>
+                            ))
+                          }
+                        </HoverableRow>
+                      </Fragment>
                     ))
                   }
                 </Table.Body>
