@@ -1,14 +1,10 @@
-http://localhost:3000/shopify?shop=inventory-manager-1991.myshopify.com
+inventory-manager-1991.myshopify.com
 
-### Goals
+### Bootup dev instructions
 
-1. Create/Update/Delete metafields via modal
-2. Implement webhooks event handlers
-  - wildcard metafields update doesnt seem to work
-    - make user enter namespaces to watch for?
-3. Product Images/Variants should be added to display, everything should be editable
-4. Search should support multiple keywords at once (seems to work out of the box)
+1. ngrok http 3000 (runs ui)
+2. run ui (yarn start)
+3. update im--dev URL
 
-/*    /index.html   200
-
-http://im-ui-20200229161908-hostingbucket-dev.s3-website.us-east-2.amazonaws.com/
+4. ngrok http 1337 (run the backend)
+5. update .env hostname + frontend values
