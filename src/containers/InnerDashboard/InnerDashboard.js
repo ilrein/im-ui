@@ -1,6 +1,5 @@
 import React, {
   useState,
-  Fragment,
 } from 'react';
 import {
   Container,
@@ -13,25 +12,20 @@ import {
   Form,
   Label,
   Icon,
+  Image,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 
-import { API_URL } from '../../constants';
+import {
+  API_URL,
+  // colors,
+} from '../../constants';
 import SyncManager from '../../components/SyncManager';
 import ConfigureModal from '../../components/ConfigureModal';
 import ProductModal from '../../components/ProductModal';
 import NewMetafieldModal from '../../components/NewMetafieldModal';
-
-const HoverableRow = styled(Table.Row)`
-  // transition: all 0.25s ease-in-out;
-  // cursor: pointer;
-
-  // &:hover {
-  //   background-color: #eee;
-  // }
-`;
 
 const DynamicHeaderCell = styled(Table.HeaderCell)`
   display: ${props => props.visible === 'true' ? 'table-cell' : 'none'};
@@ -171,42 +165,61 @@ const InnerDashboard = ({
         && !searching
           ? (
             <>
-              <Table
-                celled
-                stackable
-                structured
-                className="fade-in"
-              >
-                <Table.Header>
-                  <Table.Row>
-                    {
-                      ui.properties.map((property) => (
-                        <DynamicHeaderCell
-                          key={property.key}
-                          visible={property.visible.toString()}
-                          rowSpan="2"
+              {
+                es.products.list.map((product, index) => (
+                  <Segment
+                    key={product.id}
+                    color="grey"
+                    className="fade-in"
+                  >
+                    <Header>
+                      Product:&nbsp;
+                        <span
+                          style={{
+                            color: 'grey',
+                            textDecoration: 'underline',
+                          }}
                         >
-                          {property.key}
-                        </DynamicHeaderCell>
-                      ))
-                    }
-                  </Table.Row>
-                </Table.Header>
+                          {product.title}
+                        </span>
+                    </Header>
 
-                <Table.Body>
-                  {
-                    es.products.list.map((product) => (
-                      <Fragment key={product.id}>
-                        <HoverableRow>
+                    {
+                      product.images
+                      && product.images[0]
+                        ? (
+                          <Image
+                            src={product.images[0].src}
+                            size="tiny"
+                          />
+                        )
+                        : null
+                    }
+
+                    <Table
+                      stackable
+                    >
+                      <Table.Header>
+                        <Table.Row>
+                          {
+                            ui.properties.map((property) => (
+                              <DynamicHeaderCell
+                                key={property.key}
+                                visible={property.visible.toString()}
+                              >
+                                {property.key}
+                              </DynamicHeaderCell>
+                            ))
+                          }
+                        </Table.Row>
+                      </Table.Header>
+
+                      <Table.Body>
+                        <Table.Row>
                           <DynamicCell
                             visible={ui.properties.find(element => element.key === 'id' && element.visible === true)}
                           >
                             {product.id}
-                          </DynamicCell>
-                          <DynamicCell
-                            visible={ui.properties.find(element => element.key === 'title' && element.visible === true)}
-                          >
-                            {product.title}
                           </DynamicCell>
                           <DynamicCell
                             visible={ui.properties.find(element => element.key === 'body_html' && element.visible === true)}
@@ -289,45 +302,53 @@ const InnerDashboard = ({
                               <Icon name="plus" />
                             </Button>
                           </DynamicCell>
-                        </HoverableRow>
-                      
-                        <HoverableRow
-                          positive
+                        </Table.Row>
+                      </Table.Body>
+                    </Table>
+
+                    <Header>
+                      Variants
+                    </Header>
+
+                    {
+                      product.variants.map(variant => (
+                        <Table
+                          key={variant.id}
+                          stackable
                         >
-                          {
-                            product.variants.map(variant => (
-                              <Fragment
-                                key={variant.id}
-                              >
-                                <DynamicCell
-                                  visible
-                                >
-                                  {variant.id}
-                                </DynamicCell>
-                                <DynamicCell
-                                  visible
-                                >
-                                  {variant.title}
-                                </DynamicCell>
-                                <DynamicCell
-                                  visible
-                                >
-                                  {variant.price}
-                                </DynamicCell>
-                                <DynamicCell
-                                  visible
-                                >
-                                  {variant.inventory_quantity}
-                                </DynamicCell>
-                              </Fragment>
-                            ))
-                          }
-                        </HoverableRow>
-                      </Fragment>
-                    ))
-                  }
-                </Table.Body>
-              </Table>
+                          <Table.Header>
+                            <Table.Row>
+                              <Table.HeaderCell>
+                                title
+                              </Table.HeaderCell>
+                              <Table.HeaderCell>
+                                price
+                              </Table.HeaderCell>
+                              <Table.HeaderCell>
+                                quantity
+                              </Table.HeaderCell>
+                            </Table.Row>
+                          </Table.Header>
+
+                          <Table.Body>
+                            <Table.Row>
+                              <Table.Cell>
+                                {variant.title}
+                              </Table.Cell>
+                              <Table.Cell>
+                                {variant.price}
+                              </Table.Cell>
+                              <Table.Cell>
+                                {variant.inventory_quantity}
+                              </Table.Cell>
+                            </Table.Row>
+                          </Table.Body>
+                        </Table>
+                      ))
+                    }
+                  </Segment>
+                ))
+              }
             </>
           )
           : null

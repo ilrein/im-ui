@@ -3,14 +3,6 @@ const defaultProperties = [
     key: 'id',
     visible: true,
   },
-  // {
-  //   key: 'variants',
-  //   visible: true,
-  // },
-  {
-    key: 'title',
-    visible: true,
-  },
   {
     key: 'body_html',
     visible: true,
