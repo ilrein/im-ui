@@ -17,6 +17,7 @@ import {
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 import {
   API_URL,
@@ -33,6 +34,11 @@ const DynamicHeaderCell = styled(Table.HeaderCell)`
 
 const DynamicCell = styled(Table.Cell)`
   display: ${props => props.visible ? 'table-cell' : 'none'};
+`;
+
+const InnerCell = styled.div`
+  max-height: 8rem;
+  overflow-y: scroll;
 `;
 
 const InnerDashboard = ({
@@ -239,7 +245,7 @@ const InnerDashboard = ({
                           <DynamicCell
                             visible={ui.properties.find(element => element.key === 'created_at' && element.visible === true)}
                           >
-                            {product.created_at}
+                            {dayjs(product.created_at).format('MMM. DD/YY')}
                           </DynamicCell>
                           <DynamicCell
                             visible={ui.properties.find(element => element.key === 'handle' && element.visible === true)}
@@ -249,7 +255,7 @@ const InnerDashboard = ({
                           <DynamicCell
                             visible={ui.properties.find(element => element.key === 'updated_at' && element.visible === true)}
                           >
-                            {product.updated_at}
+                            {dayjs(product.updated_at).format('MMM. DD/YY')}
                           </DynamicCell>
                           <DynamicCell
                             visible={ui.properties.find(element => element.key === 'published_at' && element.visible === true)}
@@ -259,36 +265,40 @@ const InnerDashboard = ({
                           <DynamicCell
                             visible={ui.properties.find(element => element.key === 'tags' && element.visible === true)}
                           >
-                            {
-                              product.tags
-                              && product.tags.split(', ').map(tag => (
-                                <div
-                                  key={tag}
-                                  style={{ marginBottom: '0.25rem' }}
-                                >
-                                  <Label>
-                                    {tag}
-                                  </Label>
-                                </div>
-                              ))
-                            }
+                            <InnerCell>
+                              {
+                                product.tags
+                                && product.tags.split(', ').map(tag => (
+                                  <div
+                                    key={tag}
+                                    style={{ marginBottom: '0.25rem' }}
+                                  >
+                                    <Label>
+                                      {tag}
+                                    </Label>
+                                  </div>
+                                ))
+                              }
+                            </InnerCell>
                           </DynamicCell>
                           <DynamicCell
                             visible={ui.properties.find(element => element.key === 'metafields' && element.visible === true)}
                           >
-                            {
-                              product.metafields
-                              && product.metafields.map(metafield => (
-                                <div
-                                  key={metafield.id}
-                                  style={{ marginBottom: '0.25rem' }}
-                                >
-                                  <Label>
-                                    {metafield.key}: {metafield.value}
-                                  </Label>
-                                </div>
-                              ))
-                            }
+                            <InnerCell>
+                              {
+                                product.metafields
+                                && product.metafields.map(metafield => (
+                                  <div
+                                    key={metafield.id}
+                                    style={{ marginBottom: '0.25rem' }}
+                                  >
+                                    <Label>
+                                      {metafield.key}: {metafield.value}
+                                    </Label>
+                                  </div>
+                                ))
+                              }
+                            </InnerCell>
 
                             <Button
                               icon
