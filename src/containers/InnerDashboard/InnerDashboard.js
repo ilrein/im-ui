@@ -190,7 +190,7 @@ const InnerDashboard = ({
                         ? (
                           <Image
                             src={product.images[0].src}
-                            size="tiny"
+                            size="small"
                           />
                         )
                         : null
